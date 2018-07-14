@@ -1,0 +1,31 @@
+
+<%
+let t = Date.now();
+if(buttonValue.type == "url") {
+%>
+							<div class="form-group" id="block_<%=t%>">
+								<label>Title: </label> <a href="#" onclick="removeBlock('<%=t%>')"> <i class="fa fa-trash" style="color:red"></i></a> 
+								<input id="title_<%=max_index%>_<%=index%>" type="text" class="form-control" value="<%=buttonValue.title%>">  
+								<label>URL: </label><input id="url_<%=max_index%>_<%=index%>" type="text" class="form-control" value="<%=buttonValue.url%>"> 
+							</div>
+<%
+}
+if(buttonValue.type == "block") {
+%>
+							<div class="form-group" id="block_<%=t%>">  
+								<label>Block: </label> <a href="#" onclick="removeBlock('<%=t%>')"> <i class="fa fa-trash" style="color:red"></i></a> 
+								<select class="form-control" id="block_<%=max_index%>_<%=index%>">
+									<%
+										if(blockList != null && blockList.length  > 0) { 
+
+											blockList.forEach(function(block){ %>
+												<option value="<%=block.id%>" <% if(block.id == buttonValue.block_id){ %> selected <%}%>><%=block.name%></option>
+											<%
+											});
+										}
+										%>  
+								</select>
+							</div>
+<%
+}
+%>

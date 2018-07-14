@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include ../partials/head %>
+   <link rel="stylesheet" href="/dist/css/user.css">
+   <script src="/dist/js/pages/botedit.js"></script>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+  <% include ../partials/header %>
+  <% include ../partials/menus %>
+  
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      
+    </section>
+
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="callout callout-info">
+			  <table style="width:100%">
+				  <tr>
+					<td><button type="button" class="btn btn-success float-left addRule" onclick="reset()"><i class="icon-floppy-disk position-left" ></i>Reset</button> </td>
+					<td><button type="button" class="btn btn-primary float-right saveRule" onclick="save(); return false;"><i class="icon-floppy-disk position-left" ></i>Save</button></td> 
+				  </tr>
+				</table>
+            </div>
+			
+			<div class="row" style="padding-left: 25%">
+				<div class="col-md-8">
+				  <div class="card">
+					<!-- /.box-header -->
+					<div class="card-body">
+					  <form id="topicInfo" action="/bot_edit" method="post" encType="multipart/form-data">
+							<div class="form-group">
+							  <span>Bot name:</span>   <span class="request-item">*</span><span id="error-topicName" name="error-topicName"  class="error-msg"></span>
+								<input id="topicName" name="topicName" type="text" class="form-control" value="<%= data.bot_name %>">
+							  <!-- /.input group -->
+							</div>
+
+
+							<div class="form-group">
+							  <span>Description:</span> <span class="request-item">*</span> <span id="error-topicDes" name="error-topicDes"  class="error-msg"></span>
+								<input id="topicDes" name="topicDes" type="text" class="form-control" value="<%= data.description %>">
+							  <!-- /.input group -->
+							</div>
+
+							<div class="form-group">
+							  <span>Language:</span> <span class="request-item">*</span> <span id="error-topicLng" name="error-topicLng"  class="error-msg"></span>
+							  <select class="form-control" id="topicLng" name="topicLng">
+								<option value="en" <% if(data.topicLng == 'en'){ %> selected <% } %>>English</option>
+								<option value="ja" <% if(data.topicLng == 'ja'){ %> selected <% } %>>Japanese</option>
+								<option value="vi" <% if(data.topicLng == 'vi'){ %> selected <% } %>>Vietnamese</option>
+							  </select>
+							</div>
+
+							<% if(data.image != ''){ %>
+							<div class="form-group">
+							  <span>Curent Image:</span> <br>
+								<img src="<%= data.image %>" class="template-img">
+							  <!-- /.input group -->
+							</div>
+							<% } %>
+
+							<div class="form-group">
+							   <span>Image:</span>  <span class="request-item">*</span> <span id="error-topicLng" name="error-topicLng"  class="error-msg"></span>
+							  <input type="file" class="form-control" name="imageupload" id="imageupload">
+							  <input type="hidden" id='currentimage' name='currentimage' value='<%= data.image %>'>
+							</div>
+						<input id="_id" name="_id" type="hidden" class="form-control" value="<%= data._id %>">
+					  </form>
+					  
+					 
+					</div>
+				  </div>
+				  <!-- /.box -->
+				</div>
+				<!-- /.col-->
+			  </div>
+			  <!-- ./row -->
+          	  
+		  </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+
+  
+
+  <script type="text/javascript">
+
+    defaults = {
+        color             : '#64bd63'
+      , secondaryColor    : '#dfdfdf'
+      , jackColor         : '#fff'
+      , jackSecondaryColor: null
+      , className         : 'switchery'
+      , disabled          : true
+      , disabledOpacity   : 0.5
+      , speed             : '0.1s'
+      , size              : 'default'
+      , width             :'auto'
+      , removeWithBackspace : true
+    }
+
+    
+
+    $( document ).ready(function() {
+
+      $('#valueList').tagsInput(defaults);
+      
+    });
+
+</script>
+  
+  <% include ../partials/footer %>
+</body>
+</html>

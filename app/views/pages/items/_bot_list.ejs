@@ -1,0 +1,32 @@
+<div class="card bot-list<%=(active_bot_id == item._id ? " border border-primary" : "")%>" style="width:380px">
+    <a href="#" onclick="develop_bot('<%= item._id %>', '<%= item.bot_name %>')"><img class="bot-list-image" src="<%= (item.image != '' ||  item.image == null ? item.image : '/images/bot-face.jpg') %>"  style="width:100%"></a>
+    <div class="card-body">
+      <h2><a href="#" onclick="develop_bot('<%= item._id %>', '<%= item.bot_name %>')"><%= item.bot_name %></a></h2>
+      <p class="card-text"><a href="#" onclick="develop_bot('<%= item._id %>', '<%= item.bot_name %>')"><%= item.description %></a></p>
+      <span class="pull-right">
+					<div class="col-sm-12">
+	                      <div class="dropdown">
+	                        <button class="btn btn-warning dropdown-toggle" type="button" id="type" data-toggle="dropdown">
+	                          Action
+	                          <span class="caret"></span>
+													</button>
+	                        <ul class="dropdown-menu" role="menu" aria-labelledby="type" id="topics">
+							  <li role="presentation">
+	                            <a role="menuitem" tabindex="-1" href="#" onclick="develop_bot('<%= item._id %>','<%= item.bot_name %>')" >Develop</a>
+	                          </li> 
+	                          <li role="presentation">
+	                            <a role="menuitem" tabindex="-1" href="#" onclick="selectType('Edit','<%= item._id %>')" >Edit</a>
+	                          </li> 
+							  <li role="presentation">
+	                            <a role="menuitem" tabindex="-1" href="#"  onclick="selectType('Export','<%= item._id %>')">Export</a>
+	                          </li>
+	                          <li role="presentation">
+	                            <a role="menuitem" tabindex="-1" href="#"  onclick="selectType('Remove','<%= item._id %>')">Remove</a>
+	                          </li>
+	                        </ul>
+	                      </div>
+	                    </div>
+
+				</span>
+    </div>
+  </div>

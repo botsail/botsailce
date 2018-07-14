@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include ../partials/head %>
+
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+  <% include ../partials/header %>
+  <% include ../partials/menus %>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+      <div class="panel panel-flat" indexpanel="3">
+        <h2 class="page-header">Plugin List</h2>
+
+        <div class="row">
+          <% data.forEach(function(item){ %>
+            <%- include('items/_plugin_list', {item: item}) %>
+          <% }); %>
+        </div>
+        <!-- /.row -->
+        
+      </div>
+  </div>
+  <script type="text/javascript">
+    var elem = document.querySelector('.js-switch');
+    var init = new Switchery(elem);
+
+    defaults = {
+        color             : '#64bd63'
+      , secondaryColor    : '#dfdfdf'
+      , jackColor         : '#fff'
+      , jackSecondaryColor: null
+      , className         : 'switchery'
+      , disabled          : false
+      , disabledOpacity   : 0.5
+      , speed             : '0.1s'
+      , size              : 'default'
+    }
+
+    function onAddTag(tag) {
+      alert("Added a tag: " + tag);
+    }
+    function onRemoveTag(tag) {
+      alert("Removed a tag: " + tag);
+    }
+
+    function onChangeTag(input,tag) {
+      alert("Changed a tag: " + tag);
+    }
+
+    $( document ).ready(function() {
+
+      $('#tags_1').tagsInput({width:'auto'});
+      $('#tags_2').tagsInput({
+        width: 'auto',
+        onChange: function(elem, elem_tags)
+        {
+          var languages = ['php','ruby','javascript'];
+          $('.tag', elem_tags).each(function()
+          {
+            if($(this).text().search(new RegExp('\\b(' + languages.join('|') + ')\\b')) >= 0)
+              $(this).css('background-color', 'yellow');
+          });
+        }
+      });
+      $('#tags_3').tagsInput({
+        width: 'auto',
+
+        //autocomplete_url:'test/fake_plaintext_endpoint.html' //jquery.autocomplete (not jquery ui)
+        autocomplete_url:'test/fake_json_endpoint.html' // jquery ui autocomplete requires a json endpoint
+      });
+
+    });
+
+  </script>
+  <% include ../partials/footer %>
+  <script src="/dist/js/pages/content.js"></script>
+</body>
+</html>

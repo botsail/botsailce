@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Botsail Platform</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <% include ../partials/header %>
+  <link rel="stylesheet" href="/assets/plugins/select2/select2.min.css">
+  <link rel="stylesheet" href="/assets/plugins/switchery/switchery.css">
+  
+  <link rel="stylesheet" href="/dist/css/user.css">
+
+
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+  <!-- Navbar -->
+  
+  <!-- /.navbar -->
+  <% include ../partials/head %>
+  <% include ../partials/menus %>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      
+    </section>
+
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="callout callout-info">
+			  <table style="width:100%">
+				  <tr>
+					<td><button type="button" class="btn btn-success float-left addRule" onclick="reset()"><i class="icon-add position-left"></i> Reset</button></td>
+					<td><button type="button" class="btn btn-primary float-right saveRule" onclick="sendData()"><i class="icon-floppy-disk position-left" ></i>Save</button></td> 
+				  </tr>
+				</table>
+            </div>
+			
+			<div class="row">
+				<div class="col-sm-4">
+
+					<div class="card" indexpanel="6">
+						<div class="card-body block-list">
+							<%
+							if(blockList != null && blockList.length  > 0) { 
+
+								blockList.forEach(function(block){ %>
+									<button type="button" class="btn btn-default button-list" onclick="editBlock('<%=block.id%>')"><%=block.name%></button>
+								<%
+								});
+							}
+							%>
+					    </div>
+					<!-- /.row -->
+				    </div>
+				
+				</div>
+			
+				<div class="col-sm-8">
+				
+					<div class="card block-action" indexpanel="3">
+						<div class="card-header">
+							<div class="form-group has-success">
+								<label class="control-label" for="inputSuccess"><i class="fa fa-check"></i> Block name <span class="request-item">*</span> :</label><span id="error-name" name="error-name"  class="error-msg"></span>
+
+								<input type="text" class="form-control" id="block_name" value="<%=block != null && block.name != null ? block.name : "" %>">
+								<input type="hidden"  id="id" value="<%=block != null && block.id != null ? block.id : "" %>">
+							 </div>
+						  
+						</div>
+						<!-- /.card-header -->
+						<div class="card-body center-block">
+						
+							  <i class="icon-bin rmCt" style="display: inline;"></i>
+							  <div class="wrMove">
+								<i class="icon-arrow-up13 moveTop" style="display: inline;"></i>
+								<i class="icon-arrow-down132 moveBot" style="display: inline;"></i>
+							  </div>
+							  <span id="error-blocks" name="error-blocks"  class="error-msg"  style="padding-left: 15%;"></span>
+							  <div id="block_data"  style="padding-left: 10%;"> 
+							    
+								<%
+								var index = 0;
+								if(block != null && block.value != null && block.value.length > 0) { 
+									for(index = 0; index < block.value.length; index++) {
+										let data = block.value[index];
+									%>
+			                        	<%- include('items/_block', {block: data, index: index, blockList: blockList}) %>
+			                        <%
+									}
+
+								}
+								%>
+							  
+							  </div>
+							<br>
+							
+							<div class="row"   style="padding-left: 10%;">
+								<div class="col-md-8 col-sm-8 col-xs-8">
+									<div class="card">
+										<div class="card-body">
+											<button type="button" class="btn add-button-list" onclick="addText(); return false;">
+											  <i class="fa fa-file-alt"></i> Add Text
+											</button>
+											<button type="button" class="btn add-button-list" onclick="showUploadModal(); return false;">
+											  <i class="fa fa-image"></i> Add Image
+											</button>
+											<button type="button" class="btn add-button-list"  onclick="addRequest(); return false;">
+											  <i class="fa fa-cloud"></i> Add Request
+											</button>
+											<button type="button" class="btn add-button-list" onclick="addJSScript(); return false;">
+											  <i class="fa fa-cog"></i> Add JSScript
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						
+						</div> 
+					
+					</div>
+				
+				</div>
+			</div>
+          	  
+		  </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  
+  <!-- Upload Modal -->
+		<div class="modal fade" id="modalUploadImg">
+		  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<button class="btn btn-success btn-show-gallery add-button-list">Gallery</button>
+				<button class="btn btn-info btn-show-upload-img add-button-list">Upload</button>
+
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+				  <span aria-hidden="true">&times;</span>
+				</button>
+			  </div>
+
+			  <!-- modal body -->
+			  <div class="modal-body">
+				
+			  </div>
+			  <!-- end of modal body -->
+			  <div class="modal-footer">
+			  </div>
+			  <div class="row">
+				<input type="hidden" id="popup-selected-image" class="form-contol popup-selected-image">
+			  </div>
+			</div>
+		  </div>
+		</div>
+		<script src="/dist/js/pages/gallery_page.js"></script>
+	<!-- /.Upload Modal -->
+  </div>
+  
+<% include ../partials/footer %>
+
+<script src="/assets/plugins/select2/select2.full.min.js"></script>
+<script src="/assets/plugins/input-mask/jquery.inputmask.js"></script>
+<script src="/assets/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+<script src="/assets/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+<script src="/assets/plugins/switchery/switchery.js"></script>
+
+<script src="/dist/js/pages/block.js"></script>
+
+  <script> 
+  
+	var bindex = <%=index%>;
+
+  	var blockSelectkData = '';
+	<%
+		if(blockList != null && blockList.length  > 0) { 
+
+			blockList.forEach(function(block){ %>
+				blockSelectkData = blockSelectkData + '<option value="<%=block.id%>"><%=block.name%></option>';
+			<%
+			});
+		}
+		%>
+		
+	var attrData = '';
+	<%
+		if(attrList != null && attrList.length  > 0) { 
+
+			attrList.forEach(function(attr){ %>
+				attrData = attrData + '<option value="<%=attr.id%>"><%=attr.attribute_name%></option>';
+			<%
+			});
+		}
+		%>
+		
+function addGalleryURL(id, i) {
+	let t = Date.now();
+	let max_index = parseInt($("#gallery_max_index_" + id).val());
+	let str = '<div class="form-group" id="block_' + t +'"  style="text-align:left; width: 80%">' +
+	  '<label>Title: </label> <a href="#" onclick="removeBlock(\'' + t +'\')"> <i class="fa fa-trash"  style="color:red"></i></a>' +
+		' <input id="title_' + max_index + '_' + id + '_' + i + '" type="text" class="form-control" value=""/> ' +
+		' <label>URL: </label>' +
+		 '<input id="url_' + max_index  + '_' + id + '_' + i + '" type="text" class="form-control" value=""/> ' +
+	'</div>';
+
+	max_index = max_index + 1;
+	$("#gallery_max_index_" + id + "_" + i).val(max_index);
+	$( "#gallery_button_" + i).append( str );
+}
+
+function addGalleryBlock(id) {
+	let t = Date.now();
+	let max_index = parseInt($("#gallery_max_index_" + id).val());
+	let str = '<div class="form-group" id="block_' + t +'" style="text-align:left; width: 80%">' +
+				'  <label>Block: </label> <a href="#" onclick="removeBlock(\'' + t +'\')"> <i class="fa fa-trash"  style="color:red"></i></a>' +
+					' <select class="form-control" id="block_' + max_index + '_' + id + '_' + i + '">' +
+					blockSelectkData  +
+					'  </select>' +
+				'</div>';
+
+	max_index = max_index + 1;
+	$("#gallery_max_index_" + id + "_" + i).val(max_index);
+	$( "#gallery_button_" + i).append( str );
+}
+
+
+function addURL(id) {
+	let t = Date.now();
+	let max_index = parseInt($("#max_index_" + id).val());
+	let str = '<div class="form-group" id="block_' + t +'">' +
+	  '<label>Title: </label> <a href="#" onclick="removeBlock(\'' + t +'\')"> <i class="fa fa-trash"  style="color:red"></i></a>' +
+		' <input id="title_' + max_index + '_' + id + '" type="text" class="form-control" value=""/> ' +
+		' <label>URL: </label>' +
+		 '<input id="url_' + max_index  + '_' + id + '" type="text" class="form-control" value=""/> ' +
+	'</div>';
+
+	max_index = max_index + 1;
+	$("#max_index_" + id).val(max_index);
+	$( "#data_" + id).append( str );
+}
+
+
+function addBlock(id) {
+	let t = Date.now();
+	let max_index = parseInt($("#max_index_" + id).val());
+	let str = '<div class="form-group" id="block_' + t +'">' +
+				'  <label>Block: </label> <a href="#" onclick="removeBlock(\'' + t +'\')"> <i class="fa fa-trash"  style="color:red"></i></a>' +
+					' <select class="form-control" id="block_' + max_index + '_' + id + '">' +
+					blockSelectkData  +
+					'  </select>' +
+				'</div>';
+
+	max_index = max_index + 1;
+	$("#max_index_" + id).val(max_index);
+	$( "#data_" + id).append( str );
+}
+
+function removeBlock(id) {
+	$( "#block_" + id).remove();
+}
+
+
+
+function removeRow(id) {
+	$( "#row_" + id).remove();
+}
+
+function addGalleryImage(index) {
+	let str = '<div class="carousel-item">' + 
+											  '<img src="/uploads/templates/28951658_1306111412823141_3211716448766394368_n.jpg" class="block-img">' + 
+											  '<input type="hidden" id="gallery_' + index + '[]"  name="gallery_' + index + '[]" value="/uploads/templates/28951658_1306111412823141_3211716448766394368_n.jpg">' +
+
+											  '<div class="form-group">' +
+												  '<label>Title: </label>' +
+													' <input id="image_title_' + index + '" type="text" class="form-control" value=""/> ' +
+													' <label>Sub-title: </label>' +
+													 '<input id="image_subtitle_' + index + '" type="text" class="form-control" value=""/> ' +
+												'</div>' +
+
+												'<div class="form-group"  style="text-align:center">' + 
+												  '<div class="col-sm-offset-4 col-sm-10">' + 
+													'<button type="submit" onclick="addURL(' + index + ')" class="btn btn-default button-action">Add URL</button>' +  
+													'<button type="submit" onclick="addBlock(' + index + ')" class="btn btn-default button-action">Add Block</button>' + 
+													'<input type="hidden" id="max_index_' + index + '" value=0>' + 
+												  '</div>' + 
+												'</div>' + 
+												
+											'</div>';
+	$( "#carousel-inner" + index).append( str );
+//$( "myCarousel_" + bindex).
+
+
+}
+
+function addText() {
+	let str = '<div class="row" id="row_' + bindex + '" >' + 
+					'<div class="col-md-8 col-sm-8 col-xs-8">' + 
+						'<div class="card">' + 
+							'<span class="pull-right clickable" data-effect="remove" onclick="removeRow(' + bindex + '); return false;"><i class="fa fa-times"></i></span>' + 
+							'<div class="card-body">' + 
+								'<div id="data_' + bindex + '">' + 
+									'<div class="form-group">' + 
+										 '<span id="error-text_' + bindex + '" name="error-text_' + bindex + '"  class="error-msg"  style="padding-left: 2%;"></span>' +
+										 '<textarea class="form-control" rows="5" cols="40" id="text_' + bindex + '"></textarea>' + 
+										 '<input type="hidden" id="type_' + bindex + '" value="text">' + 
+									'</div>' + 
+								'</div>' + 
+								
+								'<div class="form-group"  style="text-align:center">' + 
+								  '<div class="col-sm-offset-4 col-sm-10">' + 
+									'<button type="submit" onclick="addURL(' + bindex + ')" class="btn btn-default button-action">Add URL</button>' +  
+									'<button type="submit" onclick="addBlock(' + bindex + ')" class="btn btn-default button-action">Add Block</button>' + 
+									'<input type="hidden" id="max_index_' + bindex + '" value=0>' + 
+								  '</div>' + 
+								'</div>' + 
+							'</div>' + 
+						'</div>  ' + 
+					'</div>' + 
+				'</div>';
+
+	$( "#block_data").append( str );
+	bindex = bindex + 1;
+}
+	
+function addImage(image_path) {
+	let str = '<div class="row" id="row_' + bindex + '">' +
+						'<div class="col-md-8 col-sm-8 col-xs-8">' +
+							'<div class="card">' +
+								'<span class="pull-right clickable" data-effect="remove" onclick="removeRow(' + bindex + '); return false;"><i class="fa fa-times"></i></span>' +
+								'<div class="card-body">' +
+									'<div id="data_' + bindex + '">' +
+										'<div class="form-group"><center>' +
+											 '<span id="error-image_' + bindex + '" name="error-image_' + bindex + '"  class="error-msg"  style="padding-left: 2%;"></span>' +
+											 '<p><img src="'+ image_path +'" class="block-img"></p>' +
+											 '<p><button type="submit" onclick="addBlock(' + bindex + ')" class="btn btn-warning">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-picture"></span> Choice Image&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button></p>' +
+											 '<input type="hidden" id="image_' + bindex + '" value="' + image_path +'">' +
+										'</center></div>' +
+										
+										'<div class="form-group">' +
+										  '<label>Title: </label>' +
+											' <input id="image_title_' + bindex + '" type="text" class="form-control" value=""/> ' +
+											' <label>Sub-title: </label>' +
+											'<input id="image_subtitle_' + bindex + '" type="text" class="form-control" value=""/> ' +
+											'<label>Groud ID: </label>'+
+											'<input id="image_groupid_' + bindex + '" type="text" class="form-control" value="">'+
+										'</div><br>' +
+										
+									'</div>' +
+									'<input type="hidden" id="type_' + bindex + '" value="image">' + 
+									'<div class="form-group"  style="text-align:center">' +
+									  '<div class="col-sm-offset-4 col-sm-10">' + 
+										'<button type="submit" onclick="addURL(' + bindex + ')" class="btn btn-default button-action">Add URL</button>' + 
+										'<button type="submit" onclick="addBlock(' + bindex + ')" class="btn btn-default button-action">Add Block</button>' + 
+										'<input type="hidden" id="max_index_' + bindex + '" value=0>' + 
+									  '</div>' +
+									'</div>' +
+									
+								'</div>' +
+							'</div>  ' +
+						'</div>' +
+					'</div>';
+	$( "#block_data").append( str );
+	bindex = bindex + 1;
+}
+
+
+function addRequest() {
+	let str = '<div class="row" id="row_' + bindex + '">' +
+							'<div class="col-md-8 col-sm-8 col-xs-8">' +
+								'<div class="card">' +
+										'<span class="pull-right clickable" data-effect="remove" onclick="removeRow(' + bindex + '); return false;"><i class="fa fa-times"></i></span>' +
+									'<div class="card-body">' +
+										'<div id="data_' + bindex + '">' +
+											 '<span id="error-method_' + bindex + '" name="error-method_' + bindex + '"  class="error-msg"  style="padding-left: 2%;"></span>' +
+											'<div class="input-group mb-3">' +
+											  '<div class="input-group-prepend">' +
+												'<button type="button" id="method_' + bindex + '" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">' +
+												  'GET' +
+												'</button>' +
+												'<ul class="dropdown-menu">' +
+												  '<li class="dropdown-item" onclick="setMethod(' + bindex + ', 1)"><a href="#">GET</a></li>' +
+												  '<li class="dropdown-item" onclick="setMethod(' + bindex + ', 2)"><a href="#">POST</a></li>' +
+												'</ul>' +
+											  '</div>' +
+											  '<input type="text" id="url_' + bindex + '" class="form-control">' +
+											'</div>' +
+											'<input type="hidden" id="type_' + bindex + '" value="request">' + 
+											'<div class="form-group">' +
+											  '<label>Paramater</label>' +
+											  '<select class="form-control select2" id="parameter_' + bindex + '" multiple="multiple"  style="width: 100%;">' +
+												attrData +
+											  '</select>' +
+											'</div>' +
+											
+											'<div class="form-group">' +
+											  '<label>Receive Data</label>' +
+											  '<select class="form-control select2" id="receive_' + bindex + '" multiple="multiple" style="width: 100%;">' +
+												attrData +
+											  '</select>' +
+											'</div>' +
+										'</div>' +
+									'</div>' +
+								'</div>  ' +
+							'</div>' +
+						'</div>';
+
+	$( "#block_data").append( str );
+	$("#parameter_" + bindex).select2();
+	$("#receive_" + bindex).select2();
+	bindex = bindex + 1;
+}
+
+
+function addJSScript() {
+	let str = '<div class="row" id="row_' + bindex + '">' +
+							'<div class="col-md-8 col-sm-8 col-xs-8">' +
+								'<div class="card">' +
+										'<span class="pull-right clickable" data-effect="remove" onclick="removeRow(' + bindex + '); return false;"><i class="fa fa-times"></i></span>' +
+									'<div class="card-body">' +
+										'<div id="data_' + bindex + '">' +
+											'<span id="error-jsscript_' + bindex + '" name="error-jsscript_' + bindex + '"  class="error-msg"  style="padding-left: 2%;"></span>' +
+											'<div>' +
+												 '<textarea id="jsscript_' + bindex + '"  class="textarea" style="width: 100%; height: 200px; font-size: 16px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>' +
+												 '<input type="hidden" id="type_' + bindex + '" value="jsscript">' + 
+										'</div>' +
+									'</div>' +
+								'</div>  ' +
+							'</div>' +
+						'</div>';
+	$( "#block_data").append( str );
+	bindex = bindex + 1;
+}
+
+function affterSelectImage() {
+	let imgStr = $('#popup-selected-image').val();
+	if(imgStr.length == 0) return;
+	
+	let imgArr = imgStr.split(",");
+	let img = imgArr[0];
+	
+	addImage(img);
+}
+  </script>
+</body>
+</html>

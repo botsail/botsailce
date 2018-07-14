@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include ../partials/head %>
+  <link rel="stylesheet" href="/bootstrap/js/bootstrap.min.js">
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+  <% include ../partials/header %>
+  <% include ../partials/menus %>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+      <div class="panel panel-flat" indexpanel="3">
+        <h2 class="page-header">Plugin List</h2>
+
+        <div class="row">
+          <% data.forEach(function(item){ %>
+            <%- include('items/_package_list_installed', {item: item}) %>
+          <% }); %>
+        </div>
+        <!-- /.row -->
+        
+      </div>
+  </div>
+  
+  <% include ../partials/footer %>
+</body>
+<script src="/dist/js/pages/content.js"></script>
+</html>

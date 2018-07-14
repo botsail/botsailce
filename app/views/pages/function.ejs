@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Botsail Platform</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <% include ../partials/header %>
+  
+  
+  <link rel="stylesheet" href="/dist/css/user.css">
+
+
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+  <!-- Navbar -->
+  
+  <!-- /.navbar -->
+  <% include ../partials/head %>
+  <% include ../partials/menus %>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      
+    </section>
+
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="callout callout-info">
+			  <table style="width:100%">
+				  <tr>
+					<td><button type="button" class="btn btn-success float-left addRule" onclick="reset()"><i class="icon-add position-left"></i> Reset</button></td>
+					<td><button type="button" class="btn btn-primary float-right saveRule" onclick="sendData()"><i class="icon-floppy-disk position-left" ></i>Save</button></td> 
+				  </tr>
+				</table>
+            </div>
+			
+			<div class="row">
+				<div class="col-sm-4">
+
+					<div class="card" indexpanel="6">
+						<div class="card-body block-list">
+							<%
+							let fnc_name = "";
+							if(functionList != null && functionList.length  > 0) { 
+
+								functionList.forEach(function(fnc){ 
+									if(type_name == "Function") fnc_name = fnc.name;
+									else fnc_name = fnc.attribute_name;
+									%>
+									<button type="button" class="btn btn-default button-list" onclick="editFunction('<%=fnc.id%>')"><%=fnc_name%></button>
+								<%
+								});
+							}
+							%>
+					    </div>
+					<!-- /.row -->
+				    </div>
+				
+				</div>
+			
+				<div class="col-sm-8">
+				
+					<div class="card block-action" indexpanel="3">
+						<div class="card-header">
+							<div class="form-group has-success">
+								<label class="control-label" for="inputSuccess"><i class="fa fa-check"></i> <%=type_name%> name <span class="request-item">*</span> :</label><span id="error-name" name="error-name"  class="error-msg"></span>
+
+								<input type="text" class="form-control" id="fnc_name" value="<%=name != null ? name : "" %>" <%=(type_name !=  "Function" ? "disabled" : "")%>>
+								<input type="hidden"  id="id" value="<%=id != null ? id : "" %>">
+								<input type="hidden"  id="type_name" value="<%=type_name != null ? type_name : "Function" %>">
+							 </div>
+						  
+						</div>
+						<!-- /.card-header -->
+						<div class="card-body center-block">
+						
+							  <i class="icon-bin rmCt" style="display: inline;"></i>
+							  <div class="wrMove">
+								<i class="icon-arrow-up13 moveTop" style="display: inline;"></i>
+								<i class="icon-arrow-down132 moveBot" style="display: inline;"></i>
+							  </div>
+							  <span id="error-script" name="error-script"  class="error-msg"  style="padding-left: 15%;"></span>
+							  <div id="block_data"  style="padding-left: 3%;"> 
+							    
+								<textarea class="form-control" rows="25" cols="40" id="script"><%=script%></textarea>
+							  
+							  </div>
+							
+						
+						</div> 
+					
+					</div>
+				
+				</div>
+			</div>
+          	  
+		  </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  
+<% include ../partials/footer %>
+
+
+<script src="/dist/js/pages/function.js"></script>
+
+  
+</body>
+</html>

@@ -1,0 +1,210 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700');
+@media (min-width: 1400px) {
+	body{
+		font-size: 17px !important;
+	}
+	div.dataTables_filter input {
+	    width: 300px !important;
+	}
+	.form-control{
+		font-size: 17px;
+	}
+}
+@media (max-width: 1399px) {
+	body{
+		font-size: 17px !important;
+	}
+}
+
+
+#main-table
+{
+	min-height: 184px;
+}
+
+#mns-table
+{
+	visibility: hidden;
+}
+
+#loader{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 999999;
+	text-align: center;
+}
+
+.request-item {
+	color: red;
+}
+
+.error-msg {
+	color: red;
+}
+
+.left-menu {
+    padding-top: 50px;
+}
+
+.panel {
+    border-color: #ddd;
+    color: #333;
+    margin: 5px 5px 5px 5px;
+}
+
+.content-header-text {
+    margin: 0 0 10px 10px;
+}
+
+.btn {
+    position: relative;
+    border-radius: 10px;
+}
+
+.addRule {
+	margin: 0px 0px 0px 5px;
+}
+
+.saveRule {
+	margin: 0px 5px 0px 0px;
+}
+
+.addAnswer {
+	margin: 5px 0px 0px 0px;
+}
+
+.topic-des {
+	padding: 10px 10px;
+	height: 100px;
+}
+
+.bg-gray92 {
+	background-color:#EBEBEB !important
+}
+
+.template-img {
+    border: 1px solid #ddd;
+    border-radius: 1px;
+    padding: 1px;
+    max-height: 100px;
+    max-height: 100px;
+}
+
+.bot-list {
+	margin: 10px 10px 10px 10px;
+}
+
+.bot-list-image {
+	height: 200px;
+	width: 200px;
+}
+
+
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  height: 100px;
+  width: 100px;
+  outline: black;
+  background-size: 100%, 100%;
+  border-radius: 50%;
+  border: 1px solid black;
+  background-image: none;
+}
+
+.carousel-control-next-icon:after
+{
+  content: '>';
+  font-size: 55px;
+  color: red;
+}
+
+.carousel-control-prev-icon:after {
+  content: '<';
+  font-size: 55px;
+  color: red;
+}
+
+
+
+.icon-remove {
+    color: #FF0000;
+}
+
+.center-block
+{
+  
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  border-radius: 3px;
+}
+
+.panel-heading span
+{
+    margin-top: -26px;
+    font-size: 15px;
+    margin-right: -12px;
+}
+
+.clickable {
+    background: rgba(0, 0, 0, 0.15);
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.block-img {
+    border: 1px solid #ddd;
+    border-radius: 1px;
+    padding: 1px;
+    max-height: 200px;
+    max-height: 200px;
+}
+
+.block-list {
+	max-height:850px; 
+	overflow-y: auto;
+}
+
+.block-action {
+	max-height:850px; 
+	overflow-y: auto;
+}
+
+.add-button-list {
+    margin-top: 15px;
+	margin-left: 15px;
+}
+
+.button-list {
+    margin-top: 15px;
+	margin-left: 25px;
+}
+
+.button-action {
+	margin-left: 25px;
+}
+
+
+/* ============== Popup Image ==================== */
+.chosen-img {
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  transform: scale(0.9);
+}
+
+.img-responsive {
+  max-width: 183px;
+  max-height: 122px;
+  margin-left: auto; 
+  margin-right: auto;
+}
+
+.well {
+  padding: 5px;
+  margin: auto;
+}

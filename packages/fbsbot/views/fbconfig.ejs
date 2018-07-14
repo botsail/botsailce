@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include ../../../app/views/partials/head %>
+
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+  <% include ../../../app/views/partials/header %>
+  <% include ../../../app/views/partials/menus %>
+
+  
+  <!-- Main content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row" style="padding-left: 25%">
+        <div class="col-md-8">
+          <div class="card">
+
+            <div class="card-body">
+              <form id="fbconfig">
+					<div class="form-group">
+                      <span>Bot ID:</span><span class="error-form botId" style="display: none;"> </span>
+                        <input id="botId" name="botId" type="text" class="form-control" value="<%= configData.bot_id %>" disabled>
+                      <!-- /.input group -->
+                    </div>
+                    <div class="form-group">
+                      <span>Page ID:</span><span id="error-pageID" name="error-pageID"  class="error-msg"></span>
+                        <input id="pageID" name="pageID" type="text" class="form-control" value="<%= configData.pageID %>">
+                      <!-- /.input group -->
+                    </div>
+
+                    <div class="form-group">
+                      <span>App ID:</span><span id="error-appID" name="error-appID"  class="error-msg"></span>
+                        <input id="appID" name="appID" type="text" class="form-control" value="<%= configData.appID %>">
+                      <!-- /.input group -->
+                    </div>
+
+                    <div class="form-group">
+                      <span>App Secret:</span><span id="error-appSecret" name="error-appSecret"  class="error-msg"></span>
+                        <input id="appSecret" name="appSecret" type="text" class="form-control" value="<%= configData.appSecret %>">
+                      <!-- /.input group -->
+                    </div>
+
+                    <div class="form-group">
+                      <span>Validation Token:</span><span id="error-validationToken" name="error-validationToken"  class="error-msg"></span>
+                        <input id="validationToken" name="validationToken" type="text" class="form-control" value="<%= configData.validationToken %>">
+                      <!-- /.input group -->
+                    </div>
+
+                    <div class="form-group">
+                      <span>Page Token:</span><span id="error-pageToken" name="error-pageToken"  class="error-msg"></span>
+						<textarea id="pageToken" name="pageToken" class="form-control" rows="3"><%= configData.pageToken %></textarea>
+                      <!-- /.input group -->
+                    </div>
+                <input id="ac" name="ac" type="hidden"  value="config">
+				<input id="id" name="id" type="hidden" value="<%= configData.id %>">
+
+              </form>
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary  pull-right" onclick="submitData()">Submit</button>
+              </div>
+             
+            </div>
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col-->
+      </div>
+      <!-- ./row -->
+    </section>
+    <!-- /.content -->
+  </div>
+
+  <script type="text/javascript">
+  //Submit  Data
+function submitData(call_back = ''){
+    //Ẩn các báo lỗi của phiên làm việc trước
+    arr = $("#fbconfig").serializeArray();
+    for (var key in arr) {
+      $(".error-form." + arr[key].name).hide();
+    }
+    
+    //Access server via ajax
+    $.ajax({ 
+        async: false,
+        cache: false,                                
+        url: '/fbsbot/fbconfig',
+        type: "POST",
+        data : arr ,
+        success: function(data) {
+            if((data.error != undefined ) && ((data.error != null) && (data.error.length > 0))){
+				showErrorMessage(data.error);
+				swal({
+					title: 'error',
+					type: "error",
+					text: "Something wrong, please check input!",
+					showConfirmButton: false,	
+					timer: 2000
+				});
+			}else{
+				swal({
+					title: 'Successfully',
+					text: "Data saved!",
+					type: "success",
+					showConfirmButton: true,	
+					timer: 3000
+				}).then((result)=>{										
+				});
+				// refresh data
+				reset();
+			}
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR.responseText);
+        }
+    });
+    return;
+  }
+</script>
+  
+  <% include ../../../app/views/partials/footer %>
+</body>
+</html>

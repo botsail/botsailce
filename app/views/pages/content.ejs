@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Botsail Platform</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <% include ../partials/header %>
+  <link rel="stylesheet" href="/assets/plugins/select2/select2.min.css">
+  <link rel="stylesheet" href="/assets/plugins/switchery/switchery.css">
+  
+  <link rel="stylesheet" href="/dist/css/user.css">
+
+
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+  <!-- Navbar -->
+  
+  <!-- /.navbar -->
+  <% include ../partials/head %>
+  <% include ../partials/menus %>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      
+    </section>
+
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="callout callout-info">
+			  <table style="width:100%">
+				  <tr>
+					<td><button type="button" class="btn btn-success float-left addRule" onclick="reset()"><i class="icon-add position-left"></i> Reset</button></td>
+					<td><button type="button" class="btn btn-primary float-right saveRule" onclick="sendData()"><i class="icon-floppy-disk position-left" ></i>Save</button></td> 
+				  </tr>
+				</table>
+            </div>
+			
+			<div class="row">
+				<div class="col-sm-6">
+
+					<div class="card" indexpanel="6">
+						<div class="card-body block-list">
+							<div class="row">
+								
+									<div class="box-header">
+									  <h3 class="box-title">Action List</h3>
+									</div>
+									<!-- /.box-header -->
+									<div class="box-body table-responsive no-padding">
+									  <table class="table table-hover" id="table">
+									  </table>
+									</div>
+									<!-- /.box-body -->
+								 
+							  </div>
+							<!-- /.row -->
+					    </div>
+					<!-- /.row -->
+				    </div>
+				
+				</div>
+			
+				<div class="col-sm-6">
+				
+					<div class="card block-action" indexpanel="3">
+						<div class="card-header">
+							<div class="form-group has-success">
+								  <label>User says similar to:  <span class="request-item">*</span> 
+									(Use regular expressions <input id="random" type="checkbox" class="js-switch" <%=(data.pattern == 'yes') ? ' checked ' : ''%> onClick="onOffRandom(this)"/>) 
+								  </label> 
+								  <span id="error-user_say" name="error-user_say"  class="error-msg"></span>
+								  <div class="input-group" id="inputdiv">
+									<input id="user_say" type="text" class="tags" style="width: 80%" value="<%=data.user_say%>"/>
+								  </div>
+								  <input id="pattern" type="hidden"  value="<%=(data.pattern == 'yes') ? 'yes' : 'no'%>"/>
+							 </div>
+						  
+						</div>
+						<!-- /.card-header -->
+						<div class="card-body center-block">
+						
+							  <i class="icon-bin rmCt" style="display: inline;"></i>
+							  <div class="wrMove">
+								<i class="icon-arrow-up13 moveTop" style="display: inline;"></i>
+								<i class="icon-arrow-down132 moveBot" style="display: inline;"></i>
+							  </div>
+							  <span id="error-blocks" name="error-blocks"  class="error-msg"  style="padding-left: 15%;"></span>
+							  <div id="block_data"  style="padding-left: 10%;"> 
+									<label>Bot answer:  <span class="request-item">*</span></label> 
+									<form role="form" id="form_answers" method="POST">
+									<span id="error-answer" name="error-answer"  class="error-msg"></span>
+									<%
+									var index = 0;
+									if((data.answer != undefined) &&  (data.answer.length != 0)) {
+									data.answer.forEach(function(answer){
+									
+									%>
+									<%- include('items/_content_answer_list', {answer: answer, blockList: blockList, aindex: index}) %>
+									<% 
+									index++;
+									}); }%>
+								   
+								   <% if(data.id == "") { %>
+									<div class="input-group" >
+										<input id="text_0" type="text" class="form-control botanswer" value="">
+										<input type="hidden" id="type_0" value="text"> 
+										<span class="input-group-btn">
+										  <button type="button" class="btn btn-danger btn-flat" onclick="Delete(this)"><span class="input-group-text"><i class="fa fa-trash"></i></span></button>
+										</span>
+									</div>
+									<br>
+									<% } %>
+									
+									<input type="hidden" id="id" name="id" value="<%=data.id%>">
+
+								  </form>
+								  
+							  
+							  </div>
+							<br>
+							
+							<div class="row"   style="padding-left: 10%;">
+								<div class="col-md-8 col-sm-8 col-xs-8">
+									<div class="card">
+										<div class="card-body">
+											<button type="" class="btn add-button-list" id="btn_answer_1"  onclick="addNewAnswerTextbox(); return false;"><i class="icon-plus22"></i> Add Text </button> 
+
+											<button type="" class="btn add-button-list" id="btn_answer_1"  onclick="showUploadModal(); return false;"><i class="icon-plus22"></i> Add Image </button>
+								  
+											<button type="" class="btn add-button-list" id="btn_answer_1"  onclick="addNewAnswerSelectbox();  return false;"><i class="icon-plus22"></i> Add Block </button>
+										</div>
+									</div>
+								</div>
+							</div>
+						
+						</div> 
+					
+					</div>
+				
+				</div>
+			</div>
+          	  
+		  </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+	
+	<!-- Upload Modal -->
+		<div class="modal fade" id="modalUploadImg">
+		  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<button class="btn btn-success btn-show-gallery add-button-list">Gallery</button>
+				<button class="btn btn-info btn-show-upload-img add-button-list">Upload</button>
+
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+				  <span aria-hidden="true">&times;</span>
+				</button>
+			  </div>
+
+			  <!-- modal body -->
+			  <div class="modal-body">
+				
+			  </div>
+			  <!-- end of modal body -->
+			  <div class="modal-footer">
+			  </div>
+			  <div class="row">
+				<input type="hidden" id="popup-selected-image" class="form-contol popup-selected-image">
+			  </div>
+			</div>
+		  </div>
+		</div>
+		<script src="/dist/js/pages/gallery_page.js"></script>
+	<!-- /.Upload Modal -->
+  </div>
+  
+<% include ../partials/footer %>
+
+<script src="/assets/plugins/select2/select2.full.min.js"></script>
+<script src="/assets/plugins/input-mask/jquery.inputmask.js"></script>
+<script src="/assets/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+<script src="/assets/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+<script src="/assets/plugins/switchery/switchery.js"></script>
+
+<script src="/dist/js/pages/content.js"></script>
+
+
+<script type="text/javascript">
+    var elem = document.querySelector('.js-switch');
+    var init = new Switchery(elem);
+	var index = <%=index%>;
+    defaults = {
+        color             : '#64bd63'
+      , secondaryColor    : '#dfdfdf'
+      , jackColor         : '#fff'
+      , jackSecondaryColor: null
+      , className         : 'switchery'
+      , disabled          : false
+      , disabledOpacity   : 0.5
+      , speed             : '0.1s'
+      , size              : 'default'
+      , defaultText       :'add something'
+      , width             :'80%'
+    }
+
+    $( document ).ready(function() {
+
+      $('#user_say').tagsInput(defaults);
+	  
+	  if('<%=data.pattern%>' == 'yes') {
+		$('#user_say_tagsinput').hide();
+		$('#user_say').show();
+		$('#pattern').val('yes');
+	  }
+	  
+	  
+      showData();
+    });
+	
+    //add a new box answwer
+    function addNewAnswerTextbox() {
+      str =  '<div class="input-group" >' +
+       '<input id="text_' + index + '" type="text" class="form-control botanswer" value="">' +
+	   '<input type="hidden" id="type_' + index + '" value="text"> ' +
+        '<span class="input-group-btn">' +
+        '<button type="button" class="btn btn-danger btn-flat" href="#" onclick="Delete(this)"><span class="input-group-text"><i class="fa fa-trash"></i></span></button>' + 
+        '</span>' +
+      '</div>' +
+      '<br> ';
+      $("#form_answers").append(str);
+	  index++;
+    }
+	
+	function affterSelectImage() {
+		let imgStr = $('#popup-selected-image').val();
+		if(imgStr.length == 0) return;
+		
+		let imgArr = imgStr.split(",");
+		let img = imgArr[0];
+		
+		str = '<div class="input-group" > ' +
+		  '<span id="imagepath" class="pathfile"></span>' +
+		  '<img src="'+ img + '" class="template-img">' +
+		  '<input type="hidden" id="image_' + index + '" value="' + img +'"> ' +
+		  '<input type="hidden" id="type_' + index + '" value="image"> ' +
+		  '<span class="input-group-btn">' +
+			'<button type="button" class="btn btn-danger btn-flat" href="#" onclick="Delete(this)"><span class="input-group-text"><i class="fa fa-trash"></i></span></button>' +
+		  '</span>' +
+		  '</div><br>';
+		  $("#form_answers").append(str);
+		  index++;
+	}
+
+    function addNewAnswerSelectbox(){
+
+      let option = '';
+
+      <%  blockList.forEach(function(item){ %>
+                option = option + '<option value="<%=item.name%>"> <%=item.name%> </option>';
+              <%  }); %>
+
+      str = 
+	     '<div class="input-group" >' +
+		 '<input type="hidden" id="type_' + index + '" value="block"> ' +
+        '<select class="form-control select2" id="block_' + index + '">' +
+
+        option + 
+          '</select>' +
+          '<span class="input-group-append">' +
+        '<button type="button" class="btn btn-danger btn-flat" href="#" onclick="Delete(this)"><span class="input-group-text"><i class="fa fa-trash"></i></span></button>' +
+          '</span>' + 
+          '</div>' +
+
+          '<br>';
+        $("#form_answers").append(str);
+		index++;
+    }
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+
+						  <% if(answer.type == "text") { %>
+						  <div class="input-group" >
+						   <input id="text_<%=aindex%>" type="text" class="form-control botanswer" value="<%=answer.content%>">
+						   <input type="hidden" id="type_<%=aindex%>" value="text"> 
+							<span class="input-group-btn">
+							<button type="button" class="btn btn-danger btn-flat" href="#" onclick="Delete(this)"><span class="input-group-text"><i class="fa fa-trash"></i></span></button>
+							</span>
+						  </div>
+						  <br>
+						  
+						  <% } else if(answer.type == "image") { %>
+						  
+						  <div class="input-group" >
+							  <span id="imagepath" class="pathfile"></span>
+							  <img src="<%=answer.image_path%>" class="template-img">
+							  <input type="hidden" id="image_<%=aindex%>" value="<%=answer.image_path%>"> 
+							  <input type="hidden" id="type_<%=aindex%>" value="image"> 
+							  <span class="input-group-btn">
+								<button type="button" class="btn btn-danger btn-flat" href="#" onclick="Delete(this)"><span class="input-group-text"><i class="fa fa-trash"></i></span></button>
+							  </span>
+						  </div><br>
+						  
+						  <% } else if(answer.type == "block") { %> 
+						  <div class="input-group" >
+							 <input type="hidden" id="type_<%=aindex%>" value="block"> 
+							<select class="form-control select2" id="block_<%=aindex%>">
+										<%
+										if(blockList != null && blockList.length  > 0) { 
+
+											blockList.forEach(function(block){ %>
+												<option value="<%=block.id%>" <% if(answer.block_id == block.id) { %> selected <%} %>><%=block.name%></option>
+											<%
+											});
+										}
+										%> 
+							  </select>
+							  <span class="input-group-append">
+							<button type="button" class="btn btn-danger btn-flat" href="#" onclick="Delete(this)"><span class="input-group-text"><i class="fa fa-trash"></i></span></button>
+							  </span>
+						  </div>
+
+						  <br>
+						  <% }	%>

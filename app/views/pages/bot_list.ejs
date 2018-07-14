@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Botsail Platform</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <% include ../partials/header %>
+  <link rel="stylesheet" href="/assets/plugins/select2/select2.min.css">
+  
+  <link rel="stylesheet" href="/dist/css/user.css">
+  <script src="/dist/js/pages/botlist.js"></script>
+
+
+</head>
+
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+  <!-- Navbar -->
+  
+  <!-- /.navbar -->
+  <% include ../partials/head %>
+  <% include ../partials/menus %>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      
+    </section>
+
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="callout callout-info">
+			  <table style="width:100%">
+				  <tr>
+					<td> </td>
+					<td><button type="button" class="btn btn-primary pull-right saveRule" onclick="window.location.href = '/bot_edit'"><i class="icon-floppy-disk position-left" ></i>Create Bot</button></td> 
+				  </tr>
+				</table>
+            </div>
+			
+			<div class="card" indexpanel="3">
+				<div class="row">
+
+				  <% data.forEach(function(item){ %>
+					<%- include('items/_bot_list', {item: item}) %>
+				  <% }); %>
+				</div>
+				<!-- /.row -->
+				
+			  </div>
+          	  
+		  </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  
+<% include ../partials/footer %>
+
+</body>
+</html>

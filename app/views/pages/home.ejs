@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include ../partials/head %>
+
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+  <% include ../partials/header %>
+  <% include ../partials/menus %>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+	<div class="row">
+        <div class="col-md-12">
+          <div class="box">
+            <div class="box-header with-border">
+              <h3 class="box-title">Welcome to Bot Sail !</h3>
+
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="row">
+                <div class="col-md-4">
+                  <p><B>Get start </B></p>
+                  <p><a href="/bs-admin/template-index">User document</a></p>
+                  <p><a href="/bs-admin/content/show">Deveoper document</a></p>
+                </div>
+                <!-- /.col -->
+				<div class="col-md-4">
+                  <p><B>Next step </B></p>
+                  <p><a href="/bs-admin/content/show">Add content</a></p>
+                  <p><a href="/bs-admin/content/show">Create template</a></p>
+                  <p><a href="/bs-admin/listtopic">Create topic</a></p>
+                </div>
+                <!-- /.col -->
+				<div class="col-md-4">
+                  <p><B>And more </B></p>
+                  <p><a href="/bs-admin/plugin">Plugin List</a></p>
+                  <p><a href="/bs-admin/market">Visit market</a></p>
+                </div>
+                <!-- /.col -->
+                
+                <!-- /.col -->
+              </div>
+              <!-- /.row -->
+            </div>
+            <!-- ./box-body -->
+
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+	  
+	  
+	  
+	  
+	  
+      <!-- Small boxes (Stat box) -->
+      <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Content</span>
+              <span class="info-box-number"><%=data.contentCnt%></span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Topic</span>
+              <span class="info-box-number"><%=data.topicCnt%></span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+
+        <!-- fix for small devices only -->
+        <div class="clearfix visible-sm-block"></div>
+
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Plugin</span>
+              <span class="info-box-number"><%=data.pluginCnt%></span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Template</span>
+              <span class="info-box-number"><%=data.templateCnt%></span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+	  
+	  
+	  <div class="row">
+        <div class="col-md-12">
+          <div class="box">
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="row">
+                <div class="col-md-8">
+					<div class="box-header">
+					  <i class="fa fa-th"></i>
+					  <h3 class="box-title">Visitor Graph</h3>
+					</div>
+						
+					<div class="box box-solid bg-teal-gradient">
+						<div class="box-body border-radius-none">
+						  <div class="chart" id="line-chart" style="height: 250px;"></div>
+						</div>
+						
+					  </div>
+                  
+                </div>
+                
+                <!-- /.col -->
+				<div class="col-md-4">
+                  <div class="box-header">
+					  <i class="fa fa-th"></i>
+					  <h3 class="box-title">Interesting plugins</h3>
+					</div>
+					<div class="attachment-block clearfix">
+						<img class="attachment-img" src="../dist/img/photo1.png" alt="Attachment Image">
+
+						<div class="attachment-pushed">
+						  <h4 class="attachment-heading"><a href="http://www.lipsum.com/">Lorem ipsum text generator</a></h4>
+
+						  <div class="attachment-text">
+							Description about the attachment can be placed here.
+							Lorem Ipsum is simply dummy text of the printing and typesetting industry... <br><br>
+							Description about the attachment can be placed here.
+							Lorem Ipsum is simply dummy text of the printing and typesetting industry...<a href="#">more</a>
+						  </div>
+						  <!-- /.attachment-text -->
+						</div>
+						<!-- /.attachment-pushed -->
+					  </div>
+                  
+                </div>
+                <!-- /.col -->
+                
+                <!-- /.col -->
+              </div>
+              <!-- /.row -->
+            </div>
+            <!-- ./box-body -->
+
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+	  
+	  
+
+    </section>
+    <!-- /.content -->
+  </div>
+  
+  <% include ../partials/footer %>
+  <script src="/dist/js/pages/home.js"></script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include ../partials/head %>
+</head>
+<body class="hold-transition login-page">
+<div class="login-box">
+  
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <p class="login-box-msg">An Easy Way to Install Botsail</p>
+
+    <% if (error.length > 0) { %>
+	  <div class="alert alert-danger"><%- error %></div>
+	  <% } %>
+
+	   <% if (success.length > 0) { %>
+	  <div class="alert alert-success"><%- success %></div>
+	  <% } %>
+
+    <form action="/login" method="post">
+      <div class="form-group has-feedback">
+
+        <input type="email" value="" class="form-control" placeholder="User Email" name="email" id="email">
+      </div>
+      <div class="form-group has-feedback">
+        <input type="password" value="" class="form-control" placeholder="User Password" name="password" id="password"> 
+      </div>
+       <div class="form-group has-feedback">
+        <input type="input" value="" class="form-control" placeholder="User Fullname" name="fullname" id="fullname"> 
+      </div>
+      <div class="form-group has-feedback">
+        <div class="input-group">
+          <input type="input" value="" class="form-control" placeholder="localhost" name="host" id="host" style="width: 60%"> 
+          <input type="input" value="" class="form-control" placeholder="27001" name="port" id="port" style="width: 40%"> 
+        </div>
+        
+      </div>
+      <div class="form-group has-feedback">
+        <input type="input" value="" class="form-control" placeholder="dbname" name="dbname" id="dbname"> 
+      </div>
+      <div class="form-group has-feedback">
+        <input type="input" value="" class="form-control" placeholder="dbuser" name="dbuser" id="dbuser"> 
+      </div>
+      <div class="form-group has-feedback">
+        <input type="input" value="" class="form-control" placeholder="dbpassword" name="password" id="password"> 
+      </div>
+      
+      <div class="row">
+
+        <!-- /.col -->
+        <div class="col-xs-4">
+          <button type="submit" class="btn btn-primary btn-block btn-flat">Install</button>
+        </div>
+        <!-- /.col -->
+      </div>
+    </form>
+
+  </div>
+  <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->
+
+<!-- jQuery 3 -->
+<script src="/dist/jquery.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="/dist/js/bootstrap.min.js"></script>
+<!-- iCheck -->
+<script src="/plugins/iCheck/icheck.min.js"></script>
+<script>
+  $(function () {
+    $('input').iCheck({
+      checkboxClass: 'icheckbox_square-blue',
+      radioClass: 'iradio_square-blue',
+      increaseArea: '20%' // optional
+    });
+  });
+</script>
+</body>
+</html>

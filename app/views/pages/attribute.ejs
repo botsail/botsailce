@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include ../partials/head %>
+<style>
+.element{
+	padding:5px;
+}
+.information{
+	padding:10px;
+}
+.useratt{
+	margin: 10px;
+}
+.botatt{
+	margin: 10px;
+}
+</style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+  <% include ../partials/header %>
+  <% include ../partials/menus %>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+	<div class="row">
+		<div class="col-sm-6" class="left" >
+				<div class="card">
+					<div class="card-body block-list">
+				<button type="button" class="btn btn-success addRule newuseratt" data-toggle="modal" data-target="#myModal-new-userattributes"><i class="glyphicon glyphicon-plus-sign"></i> New User Attributes</button>     
+						<center><h3>User attributes</h3></center>
+							<div class="element" id="user-table">
+
+							</div>
+					</div>
+				</div>
+		</div>
+		<div class="col-sm-6" class ="right" >    
+				<div class="card">
+					<div class="card-body block-list">
+				<button type="button" class="btn btn-success addRule newbotatt" data-toggle="modal" data-target="#myModal-new-botattributes"><i class="glyphicon glyphicon-plus-sign"></i> New Bot Attributes</button>     
+						<center><h3>Bot attributes</h3></center> 
+							<div class="element" id="bot-table">
+									   
+							</div>
+					</div>
+				</div>
+		</div>
+	</div>
+	
+	<!-- Modal add new-botattributes -->
+  <div class="modal fade" id="myModal-new-botattributes" role="dialog">
+			<div class="modal-dialog">
+			
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header" style="background-color:#e8e9ea">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h5 class="modal-title">Create New Bot Attributes</h5>
+					</div>
+					<div class="modal-body">
+				<div>
+					<label> Attributes Name: </label>
+					<input type="text" class="form-control" id="new_botattributes">
+					<label> Attributes Value: </label>
+					<input type="text" class="form-control" id="new_botvalue">
+				</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-success" onclick="newbotatt()" data-dismiss="modal">Save</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+
+	<!-- Modal add edit-bot attributes -->
+  <div class="modal fade" id="myModal-edit-botattributes" role="dialog">
+			<div class="modal-dialog">
+			
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header" style="background-color:#e8e9ea">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h5 class="modal-title">Edit User Attributes</h5>
+					</div>
+					<div class="modal-body">
+				<div>
+					<label>Current Name: </label>
+					<input type="text" class="form-control" id="old_botattributes" disabled>
+				</div>
+				<div>
+					<label>New Name: </label>
+					<input type="text" class="form-control" id="edit_botattributes">
+				</div>
+				<div>
+						<label>Value: </label>
+						<input type="text" class="form-control" id="edit_botvalue">
+					</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger pull-left" onclick="confirmDeleteBotAtt()" data-dismiss="modal">Delete</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary" onclick="editbotatt()" data-dismiss="modal">Edit</button>
+					</div>
+				</div>   
+			</div>
+		</div>
+  <!-- Modal add new-attributes -->
+  <div class="modal fade" id="myModal-new-userattributes" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header" style="background-color:#e8e9ea">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h5 class="modal-title">Create New User Attributes</h5>
+        </div>
+        <div class="modal-body">
+			<div>
+				<label> Attributes Name: </label>
+				<input type="text" class="form-control" id="new_userattributes">
+			</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		  <button type="button" class="btn btn-success" onclick="newuseratt()" data-dismiss="modal">Save</button>
+        </div>
+      </div>      
+    </div>
+	</div>
+	
+
+
+  <!-- Modal add edit-attributes -->
+  <div class="modal fade" id="myModal-edit-userattributes" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header" style="background-color:#e8e9ea">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h5 class="modal-title">Edit User Attributes</h5>
+        </div>
+        <div class="modal-body">
+			<div>
+				<label>Current Name: </label>
+				<input type="text" class="form-control" id="old_attributes" disabled>
+			</div>
+			<div>
+				<label>New Name: </label>
+				<input type="text" class="form-control" id="edit_userattributes">
+			</div>
+        </div>
+        <div class="modal-footer">
+					<button type="button" class="btn btn-danger pull-left" onclick="confirmDeleteUserAtt()" data-dismiss="modal">Delete</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		  		<button type="button" class="btn btn-primary" onclick="edituseratt()" data-dismiss="modal">Edit</button>
+        </div>
+      </div>   
+		</div>
+  </div>
+	</div>
+	
+  <% include ../partials/footer %>
+	<script src="/dist/js/pages/attribute.js"></script>
+</body>
+</html>

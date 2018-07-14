@@ -1,0 +1,49 @@
+          		<div class="col-md-4">
+			<!-- Widget: user widget style 1 -->
+			  <div class="box box-widget widget-user">
+				<!-- Add the bg color to the header using any of the bg-* classes -->
+				<div class="widget-user-header bg-gray92">
+					<h3 class="widget-user-username"><%= item.title %></h3>
+					<h5 class="widget-user-desc"><%= item.description %></h5>
+				  </div>
+				<div class="box-footer">
+				  <div class="row">
+						<div class="col-sm-4 border-right">
+						  <div class="description-block">
+							<h5 class="description-header"><%= item.message_count %></h5>
+							<a onclick="UpdatePack('<%= item.path %>', '<%= item.package_folder %>')" style="cursor: pointer;"><span class="description-text"><%= item.action_type %></span></a>
+						</div>
+						  <!-- /.description-block -->
+						</div>
+						<!-- /.col -->
+						<div class="col-sm-4 border-right">
+						  <div class="description-block">
+						  </div>
+						  <!-- /.description-block -->
+						</div>
+						<!-- /.col -->
+						<div class="col-sm-4">
+						  <div class="description-block">
+							
+							  <a onclick="Status('<%= item.statusview %>', '<%= item.package_name %>', '<%= item.package_folder %>')" style="cursor: pointer;"><span class="pull-right badge bg-red"><%= item.statusview %> </span></a>
+						  </div>
+						  <!-- /.description-block -->
+						</div>
+						<!-- /.col -->
+					  </div>
+						<!-- /.row -->
+						  <!-- Modal -->
+					<div class="modal fade" id="myModal" role="dialog">
+						<div class="modal-dialog">
+							<!-- Modal content-->
+							<div class="modal-content">
+								<div class="modal-body" id="notification">
+								</div>
+							</div>
+						</div>
+					</div>
+					</div>
+				  </div>
+			  <!-- /.widget-user -->
+			</div>
+          <!-- /.col -->

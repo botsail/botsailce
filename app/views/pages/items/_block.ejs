@@ -1,0 +1,209 @@
+<%
+if(block.type == "text") {
+%>
+	<div class="row" id="row_<%=index%>">
+		<div class="col-md-8 col-sm-8 col-xs-8">
+			<div class="card">
+				<span class="pull-right clickable" data-effect="remove" onclick="removeRow(<%=index%>); return false;"><i class="fa fa-times"></i></span>
+				<div class="card-body">
+					<div id="data_<%=index%>">
+						<div class="form-group">
+							<span id="error-text_<%=index%>" name="error-text_<%=index%>"  class="error-msg"  style="padding-left: 2%;"></span>
+							<textarea class="form-control" rows="5" cols="40" id="text_<%=index%>"><%=block.content%></textarea>
+							<input type="hidden" id="type_<%=index%>" value="text">
+						</div>
+						<%
+						var max_index = 0;
+						if(block.button != undefined && block.button != null && block.button.length > 0) { 
+							block.button.forEach(function(buttonValue){ %>
+								<%- include('_block_button', {buttonValue: buttonValue, index: index, blockList: blockList, max_index: max_index}) %>
+								<% max_index++; %>
+							<%
+							});
+						}
+						%>
+					</div>
+					<div class="form-group"  style="text-align:center">
+						<div class="col-sm-offset-4 col-sm-10">
+							<button type="submit" onclick="addURL(<%=index%>)" class="btn btn-default button-action">Add URL</button>
+							<button type="submit" onclick="addBlock(<%=index%>)" class="btn btn-default button-action">Add Block</button>
+							<input type="hidden" id="max_index_<%=index%>" value="<%=max_index%>">
+						</div>
+					</div>
+				</div>
+			</div>  
+		</div>
+	</div>
+<%
+}
+
+if(block.type == "image") {
+%>
+	<div class="row" id="row_<%=index%>">
+		<div class="col-md-8 col-sm-8 col-xs-8">
+			<div class="card"><span class="pull-right clickable" data-effect="remove" onclick="removeRow(<%=index%>); return false;"><i class="fa fa-times"></i></span>
+				<div class="card-body">
+					<div id="data_<%=index%>">
+						<div class="form-group">
+							<center>
+								<p><img src="<%=block.image_path%>" class="block-img"></p>
+								<p><button type="submit" onclick="addBlock(<%=index%>)" class="btn btn-warning">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-picture"></span> Add Image&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button></p>
+								<input type="hidden" id="image_<%=index%>" value="<%=block.image_path%>">
+							</center>
+						</div>
+						<div class="form-group">
+							<label>Title: </label> 
+							<input id="image_title_<%=index%>" type="text" class="form-control" value="<%=block.title%>">  
+							<label>Sub-title: </label>
+							<input id="image_subtitle_<%=index%>" type="text" class="form-control" value="<%=block.sub_title%>"> 
+							<label>Groud ID: </label>
+							<input id="image_groupid_<%=index%>" type="text" class="form-control" value="<%=block.group_id%>">
+						</div>
+						
+						<%
+						var max_index = 0;
+						if(block.button != undefined && block.button != null && block.button.length > 0) { 
+							block.button.forEach(function(buttonValue){ %>
+								<%- include('_block_button', {buttonValue: buttonValue, index: index, blockList: blockList, max_index: max_index}) %>
+								<% max_index++; %>
+							<%
+							});
+						}
+						%>
+					</div>
+					<input type="hidden" id="type_<%=index%>" value="image">
+					<div class="form-group" style="text-align:center">
+						<div class="col-sm-offset-4 col-sm-10">
+							<button type="submit" onclick="addURL(<%=index%>)" class="btn btn-default button-action">Add URL</button>
+							<button type="submit" onclick="addBlock(<%=index%>)" class="btn btn-default button-action">Add Block</button>
+							<input type="hidden" id="max_index_<%=index%>" value="<%=max_index%>">
+						</div>
+					</div>
+				</div>
+			</div>  
+		</div>
+	</div>
+<%
+}
+
+if(block.type == "request") {
+%>
+	<div class="row" id="row_<%=index%>">
+		<div class="col-md-8 col-sm-8 col-xs-8">
+			<div class="card">
+				<span class="pull-right clickable" data-effect="remove" onclick="removeRow(<%=index%>); return false;"><i class="fa fa-times"></i></span>
+				<div class="card-body">
+					<div id="data_<%=index%>">
+						<div class="input-group mb-3">
+							<span id="error-method_<%=index%>" name="error-method_<%=index%>"  class="error-msg"  style="padding-left: 2%;"></span>
+							<div class="input-group-prepend">
+								<button type="button" class="btn btn-warning dropdown-toggle" id="method_<%=index%>" data-toggle="dropdown"><%=block.action%></button>
+								<ul class="dropdown-menu">
+									<li class="dropdown-item"  onclick="setMethod(<%=index%>, 1)"><a href="#" >GET</a></li>
+									<li class="dropdown-item"   onclick="setMethod(<%=index%>, 2)"><a href="#">POST</a></li>
+								</ul>
+							</div>
+							<input type="text" class="form-control" id="url_<%=index%>" value="<%=block.url%>">
+						</div>
+						<div class="form-group">
+							<label>Paramater</label>
+							<select class="form-control select2" id="parameter_<%=index%>" multiple="" style="width: 100%;" >
+								<%
+										if(blockList != null && blockList.length  > 0) { 
+
+											blockList.forEach(function(block){ %>
+												<option value="<%=block.id%>"><%=block.name%></option>
+											<%
+											});
+										}
+										%>
+							</select>
+							<script>
+								$(function() {
+									var arrParameter= [];
+									$("#parameter_<%=index%>").select2();
+									<%
+									
+									if((block.parameter != undefined) && (block.parameter != null)&& (block.parameter.length > 0)) {
+										for(let i =0; i < block.parameter.length; i++) {
+										%>
+											arrParameter.push('<%=block.parameter[i]%>')
+										<%
+										}
+									}
+									%>
+										
+									$.each($("#parameter_<%=index%>"), function(){
+											$(this).select2('val', arrParameter);
+									});
+									
+								});
+							</script>
+							
+						</div>
+						<div class="form-group">
+							<label>Receive Data</label>
+							<select class="form-control select2" id="receive_<%=index%>" multiple="" style="width: 100%;">
+								<%
+										if(blockList != null && blockList.length  > 0) { 
+
+											blockList.forEach(function(block){ %>
+												<option value="<%=block.id%>"><%=block.name%></option>
+											<%
+											});
+										}
+										%>  
+							</select>
+							<script>
+								$(function() {
+									var arrParameter= [];
+									$("#receive_<%=index%>").select2();
+									<%
+									
+									if((block.receive != undefined) && (block.receive != null)&& (block.receive.length > 0)) {
+										for(let i =0; i < block.receive.length; i++) {
+										%>
+											arrParameter.push('<%=block.receive[i]%>')
+										<%
+										}
+									}
+									%>
+										
+									$.each($("#receive_<%=index%>"), function(){
+											$(this).select2('val', arrParameter);
+									});
+									
+								});
+							</script>
+						</div>
+					</div>
+					<input type="hidden" id="type_<%=index%>" value="request">
+				</div>
+			</div>  
+		</div>
+	</div>
+<%
+}
+
+if(block.type == "jsscript") {
+%>
+	<div class="row" id="row_<%=index%>">
+		<div class="col-md-8 col-sm-8 col-xs-8">
+			<div class="card">
+				<span class="pull-right clickable" data-effect="remove" onclick="removeRow(<%=index%>); return false;"><i class="fa fa-times"></i></span>
+				<div class="card-body">
+					<div id="data_<%=index%>">
+						<div class="form-group">
+							<span id="error-jsscript_<%=index%>" name="error-jsscript_<%=index%>"  class="error-msg"  style="padding-left: 2%;"></span>
+							<textarea id="jsscript_<%=index%>"  class="textarea" style="width: 100%; height: 200px; font-size: 16px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"><%=block.jsscript%></textarea>
+							<input type="hidden" id="type_<%=index%>" value="jsscript">
+						</div>
+					</div>
+					
+				</div>
+			</div>  
+		</div>
+	</div>
+<%
+}
+%>
