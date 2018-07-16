@@ -1,16 +1,19 @@
 var FBConnectSchema = require(global.appRoot + '/packages/fbsbot/models/entities/package');
 var Controller = require(global.appRoot + '/core/controller');
 var Common 			= 	require(global.appRoot + "/core/common.js");
+var constants = require(global.appRoot + '/config/constants');
 
 class FBSConfigController extends Controller {
 	static async fbconfig(req, res) {
 		Controller.prototype.setResponse(req, res);
 		FBConnectSchema.findOne({ "name": "fbsbot", "datatype" : "package-config", bot_id:  Controller.prototype.getBotID()}, function(err, result) {
 			let configData;
+			let host = Controller.prototype.getBotID();
+			if(Common.isset(constants.host)) host = constants.host+ "/fbsbot/webhook/" + Controller.prototype.getBotID()
 			if(Common.isset(result) == null)  {
 				configData = {
-					bot_id: Controller.prototype.getBotID(),
-					pageID: '',
+					bot_id: host,
+					//pageID: '',
 					appID: '',
 					appSecret: '',
 					validationToken: '',
@@ -34,7 +37,7 @@ class FBSConfigController extends Controller {
 		
 		//Validation
 		req.params = fbconfig;
-		req.check('pageID','pageID  is require').notEmpty();
+		//req.check('pageID','pageID  is require').notEmpty();
 		req.check('appID','appID  is require').notEmpty();
 		req.check('appSecret','appSecret  is require').notEmpty();
 		req.check('validationToken','validationToken  is require').notEmpty();
@@ -87,48 +90,7 @@ class FBSConfigController extends Controller {
 			});
 		}
 	}
-/*
-	static fbconfigData(req, res) {
-		
-		//var validate = this.validation(this.req.body);
-		var validate = { result : 1 };
-		if(validate.result == 1) {
-			var configObj = {
-				"bot_id": Controller.prototype.getBotID(),
-				"pageID": req.body.pageID,
-				"appID": req.body.appID,
-				"appSecret": req.body.appSecret,
-				"validationToken": req.body.validationToken,
-				"pageToken": req.body.pageToken
-			}
 
-			FBConnectSchema.findOneAndUpdate(
-			    { "package_name": "fbsbot"},
-			    { 
-			        "$set": {
-			            "config": configObj
-			        }
-			    },
-			    function(err,doc) {
-			    	let json = {
-						message: "Update successfull!",
-						status: 1
-					}
-
-					if(err != null) {
-						json.message = "Update faild!";
-						json.status = -1;
-					}
-
-					Plugin.prototype.returnJson(res, json);
-					return;
-			    }
-			);
-
-		} else {
-			Plugin.prototype.returnJson(res, validate);
-		}
-	}*/
 }
 
 module.exports = FBSConfigController;

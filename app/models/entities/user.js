@@ -18,13 +18,14 @@ var userSchema = mongoose.Schema({
 	updated_date: Date,
 	created_date: Date,
 	active_hash: String,
-	image: { type : String , "default" : "/image/default-avatar.jpg" },
+	image: { type : String , "default" : "/images/default-avatar.png" },
 	active_hash_times: {
 		token: String,
 		date: Date
 	},
 	ym: String,
-	user_public_folder: String
+	user_public_folder: String, 
+	role: { type : String , "default" : "member" },
 });
 
 

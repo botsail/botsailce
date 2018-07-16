@@ -364,8 +364,11 @@ class Attributes {
 			});
 			botconfig.findById({_id:bot},'user_attribute.name bot_attribute.name bot_attribute.value')
 			.then(data=>{
-				data.user_attribute.forEach(element=>{dataJson.user.push(element)})
-				data.bot_attribute.forEach(element=>{dataJson.bot.push(element)})				
+				if(data != null) {
+					data.user_attribute.forEach(element=>{dataJson.user.push(element)});
+					data.bot_attribute.forEach(element=>{dataJson.bot.push(element)});				
+				}
+				
 			})
 			.then(()=>{
 				resolve(dataJson);

@@ -3,10 +3,12 @@ var Content            = require(global.appRoot + '/app/models/entities/content'
 var Block            = require(global.appRoot + '/app/models/entities/block');
 var Common = require(global.appRoot + "/core/common.js");
 const Communications = require(global.appRoot + '/app/models/entities/communication');
+var LastMessage            = require(global.appRoot + '/app/models/entities/last_message');
 var Cache            = require(global.appRoot + '/core/util/cache');
 var PromiseBook            = require(global.appRoot + '/core/util/promisebook');
 const { MessengerBatch } = require('messaging-api-messenger');
 var RuntimeAPI            = require(global.appRoot + '/core/runtimeapi');
+var dateFormat = require('dateformat');
 
 class BSPatternEngine extends Engine { 
 	constructor() {
@@ -52,7 +54,7 @@ class BSPatternEngine extends Engine {
 					myself.answer.value.push(result.answer[R]);
 					myself.answer.type = "Content";
 					myself.promiseBook.updatePointStatus("query");
-					myself.messageTracking(client, bot_id, userId);
+					myself.messageTracking(query_string,client, bot_id, userId);
 				} else {
 					Block.findOne({bot_id : bot_id, datatype: "block", $where: "\"" + query_string +"\".match(this.query)"}, function(err, result){
 						if(err != null)  { 
@@ -61,7 +63,7 @@ class BSPatternEngine extends Engine {
 							myself.answer.value = result.value;
 							myself.answer.type = "Block";
 							myself.promiseBook.updatePointStatus("query");
-							myself.messageTracking(bot_id, userId);
+							myself.messageTracking(query_string,client, bot_id, userId);
 						}  else { 
 							myself.sendTextToUser(client,  userId, ". . . ");
 						}
@@ -75,21 +77,99 @@ class BSPatternEngine extends Engine {
 		
 	}
 	
-	messageTracking(client, bot_id, sender_id) {
+	messageTracking(message, bot_id, sender_id) {
 		var myself = this;
 		Communications.findOne({bot_id : bot_id, uid: sender_id, type: 'messager'}, function(err, comm) {
 			if(Common.isset(comm) != null) {
+				//this.updateCom(message, bot_id, sender_id)
 				myself.promiseBook.updatePointStatus("messageTracking");
 			} else {
-				/*let user = client.getUserProfile(sender_id);
-				content.gender = user.gender;
-				if(Common.isset(user.fullname) == null) content.fullname = user.first_name + ' ' + user.last_name
-				else content.fullname = user.fullname;
-				*/
+				//this.addCom(message, bot_id, sender_id)
 				myself.promiseBook.updatePointStatus("messageTracking");
 			}
 		} );
 		
+	}
+	
+	async updateCom(message, bot_id, uid) {
+		let last_time = dateFormat(Date.now(), "yyyy-mm-dd HH:MM:ss");
+		let data = {
+                                time: last_time,
+                                who: 'guest',
+                                message: message
+                            };
+		const newContent = await Communications.findOneAndUpdate({
+			uid: content.uid,
+			bot_id: bot_id
+		}, {
+			$push: {
+				data: data
+			}
+		}, {
+			new: true
+		});
+
+		const newLastmessage = 
+			{
+				time: last_time,
+				message: message
+			};
+
+		const lastMessage = await LastMessage.findOneAndUpdate({
+			datatype: 'last-message',
+			'data.uid': uid,
+			bot_id: bot_id
+		}, {
+			$set: {
+				'data.$.data-member': newLastmessage
+			}
+		});
+	}
+	
+	async addCom(message, bot_id, uid) {
+		let last_time = dateFormat(Date.now(), "yyyy-mm-dd HH:MM:ss");
+		let data = {
+			type:'messager',
+			bot_id: bot_id,
+			uid:uid,
+			fullname:"chua-lam",
+			gender:"chua-lam",
+			data: [{
+				time:last_time,
+				who:"guest",//guest, bot
+				message:message
+			}],
+		};
+		
+
+		const newUser = new Communications(content);
+		await newUser.save();
+
+		const lastMessageData = {
+			uid:uid,
+			data_bot: {
+					time:last_time,
+					message:message
+				},
+			data_guest: {
+					time: null,
+					message:"",
+				},
+
+		}
+		
+		let data = await LastMessage.findOne({datatype: 'last-message', bot_id: bot_id, "data.uid" : uid},{'data.$': 1});
+		if((data != undefined) || (data != null)) {
+			await LastMessage.update({datatype: 'last-message', bot_id: bot_id, "data.uid" : uid},{"data.$.data-bot" : lastMessageData.data_bot, "data.$.data_guest" : lastMessageData.data_guest }
+			);
+		} else {	//If key not exits, insert
+			
+			data = await LastMessage.update(
+			  {datatype: 'last-message', bot_id: bot_id  },
+			  {$push: { "data" : lastMessageData}},
+			);
+		}
+
 	}
 	
 

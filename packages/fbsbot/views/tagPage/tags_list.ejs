@@ -21,31 +21,43 @@
     </style>
 </head>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition sidebar-mini">
 
     <div class="wrapper">
         <% include ../../../../app/views/partials/header %>
         <% include ../../../../app/views/partials/menus %>
-        <div class="content-wrapper">
-            <div class="container">
-                <div class="row" style="margin: 30px 0;">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-8">
-                        <input type="text" class="form-control" placeholder="Search tag..." id="searchTag" style=" margin: auto">
-                    </div>
-                    <div class="col-md-2"></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-8 mx-auto">
-                        <table class="table table-striped table-hover table-condensed" id="tagsListTable">
-                            <!-- content here -->
-                        </table>
-                    </div>
-                    <div class="col-md-2"></div>
-                </div>
-            </div>
-        </div>
+        <div class="content-wrapper"  style="padding-left: 25%">
+			<section class="content-header"> </section>
+			<div class="row">
+			
+				<div class="col-md-8">
+					<div class="card">
+						<div class="card-body">
+							
+							<div class="row" style="margin: 30px 0;">
+								<div class="col-md-2"></div>
+								<div class="col-md-8">
+									<input type="text" class="form-control" placeholder="Search tag..." id="searchTag" style=" margin: auto">
+								</div>
+								<div class="col-md-2"></div>
+							</div>
+							<div class="row">
+								<div class="col-md-2"></div>
+								<div class="col-md-8 mx-auto">
+									<table class="table table-striped table-hover table-condensed" id="tagsListTable">
+										<!-- content here -->
+									</table>
+								</div>
+								<div class="col-md-2"></div>
+							</div>
+						 
+						</div>
+					 </div>
+					  <!-- /.box -->
+				</div>
+		
+			</div>
+		</div>
     </div>
 
     <% include ../../../../app/views/partials/footer %>

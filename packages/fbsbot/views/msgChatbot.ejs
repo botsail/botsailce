@@ -28,10 +28,17 @@
     <div class="wrapper">
         <% include ../../../app/views/partials/header %>
         <% include ../../../app/views/partials/menus %>
-                <div class="content-wrapper">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-1"></div>
+		<div class="content-wrapper">
+			<section class="content">
+			  <div class="row" style="padding-left: 25%">
+				<div class="col-md-8">
+				  <div class="card">
+
+					<div class="card-body">
+						<div class="col-md-1"></div>
+                            
+							
+							<div class="col-md-1"></div>
                             <div class="col-md-10">
                                 <button class="btn btn-success btn-back">Back</button>
                                 <button class="btn btn-success pull-right" id="btnSend">Send</button>
@@ -42,107 +49,121 @@
                                 </table>
                             </div>
                             <div class="col-md-1"></div>
-                        </div>
-                    </div>
+					  
+					 
+					</div>
+				  </div>
+				  <!-- /.box -->
+				</div>
+				<!-- /.col-->
+			  </div>
+			  <!-- ./row -->
+			</section>
+				
+				
+				
+				
+				
+                    
 
                     <!-- msg modal  -->
-                    <div class="modal fade" id="modelUserMsg" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="panel panel-primary">
+			<div class="modal fade" id="modelUserMsg" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="panel panel-primary">
 
-                                    <div class="panel-heading">
-                                        <span class="glyphicon glyphicon-comment"></span> Chat
-                                        <div class="btn-group pull-right text-right">
-                                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" onClick="closeModalMsg()">
-                                                <span class="glyphicon glyphicon-remove"></span>
-                                            </button>
+							<div class="panel-heading">
+								<span class="glyphicon glyphicon-comment"></span> Chat
+								<div class="btn-group pull-right text-right">
+									<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" onClick="closeModalMsg()">
+										<span class="glyphicon glyphicon-remove"></span>
+									</button>
 
-                                            <!-- <ul class="dropdown-menu slidedown">
-                                                <li>
-                                                    <a href="http://www.jquery2dotnet.com">
-                                                        <span class="glyphicon glyphicon-refresh"></span>Refresh
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="http://www.jquery2dotnet.com">
-                                                        <span class="glyphicon glyphicon-ok-sign"> </span> Available
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="http://www.jquery2dotnet.com">
-                                                        <span class="glyphicon glyphicon-remove"></span> Busy
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="http://www.jquery2dotnet.com">
-                                                        <span class="glyphicon glyphicon-time"></span> Away
-                                                    </a>
-                                                </li>
-                                                <li class="divider"></li>
-                                                <li>
-                                                    <a href="http://www.jquery2dotnet.com">
-                                                        <span class="glyphicon glyphicon-off"></span> Sign Out
-                                                    </a>
-                                                </li>
-                                            </ul> -->
+									<!-- <ul class="dropdown-menu slidedown">
+										<li>
+											<a href="http://www.jquery2dotnet.com">
+												<span class="glyphicon glyphicon-refresh"></span>Refresh
+											</a>
+										</li>
+										<li>
+											<a href="http://www.jquery2dotnet.com">
+												<span class="glyphicon glyphicon-ok-sign"> </span> Available
+											</a>
+										</li>
+										<li>
+											<a href="http://www.jquery2dotnet.com">
+												<span class="glyphicon glyphicon-remove"></span> Busy
+											</a>
+										</li>
+										<li>
+											<a href="http://www.jquery2dotnet.com">
+												<span class="glyphicon glyphicon-time"></span> Away
+											</a>
+										</li>
+										<li class="divider"></li>
+										<li>
+											<a href="http://www.jquery2dotnet.com">
+												<span class="glyphicon glyphicon-off"></span> Sign Out
+											</a>
+										</li>
+									</ul> -->
 
-                                        </div>
-                                    </div>
+								</div>
+							</div>
 
-                                    <div class="panel-body">
+							<div class="panel-body">
 
-                                        <ul class="chat">
+								<ul class="chat">
 
-                                        </ul>
+								</ul>
 
-                                    </div>
+							</div>
 
-                                </div>
-                            </div>
-                        </div>
+						</div>
+					</div>
+				</div>
 
-                    </div>
-                    <!-- broadcase modal -->
-                    
-                    <!-- model -->
-                    <div class="modal fade" id="broadcaseDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Message Information</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
+			</div>
+			<!-- broadcase modal -->
+			
+			<!-- model -->
+			<div class="modal fade" id="broadcaseDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Message Information</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
 
-                                    <form>
-                                        <div class="form-group">
-                                            <label>Title:</label>
-                                            <input type="text" class="form-control" id="broadcaseTitle">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="">Description</label>
-                                            <textarea class="form-control" rows="3" id="broadcaseDesc"></textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Content:</label>
-                                            <textarea class="form-control" rows="5" id="broadcaseContent"></textarea>
-                                        </div>
-                                    </form>
+							<form>
+								<div class="form-group">
+									<label>Title:</label>
+									<input type="text" class="form-control" id="broadcaseTitle">
+								</div>
+								<div class="form-group">
+									<label for="">Description</label>
+									<textarea class="form-control" rows="3" id="broadcaseDesc"></textarea>
+								</div>
+								<div class="form-group">
+									<label>Content:</label>
+									<textarea class="form-control" rows="5" id="broadcaseContent"></textarea>
+								</div>
+							</form>
 
-                                    <label for="">Danh sach</label>
-                                    <div id="listUsers"></div>
-                                </div>
+							<label for="">Danh sach</label>
+							<div id="listUsers"></div>
+						</div>
 
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-info btn-custom" id="btnSendMsg">Send</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-info btn-custom" id="btnSendMsg">Send</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
     </div>
 
     <% include ../../../app/views/partials/footer %>

@@ -27,15 +27,11 @@
             <div class="card-body">
               <form id="fbconfig">
 					<div class="form-group">
-                      <span>Bot ID:</span><span class="error-form botId" style="display: none;"> </span>
+                      <span>Webhooks:</span><span class="error-form botId" style="display: none;"> </span>
                         <input id="botId" name="botId" type="text" class="form-control" value="<%= configData.bot_id %>" disabled>
                       <!-- /.input group -->
                     </div>
-                    <div class="form-group">
-                      <span>Page ID:</span><span id="error-pageID" name="error-pageID"  class="error-msg"></span>
-                        <input id="pageID" name="pageID" type="text" class="form-control" value="<%= configData.pageID %>">
-                      <!-- /.input group -->
-                    </div>
+                    
 
                     <div class="form-group">
                       <span>App ID:</span><span id="error-appID" name="error-appID"  class="error-msg"></span>
