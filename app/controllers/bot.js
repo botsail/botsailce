@@ -20,9 +20,11 @@ class BotController extends Controller {
 		
 		let dataget;
 		let active_bot_id = Controller.prototype.getBotID();
+		
+		if((Common.isset(req.user) == null)  || (Common.isset(req.user._id) == null)) res.redirect('/login');
 
 		//Find data in collection packages
-		Bot.find({name: "bot"}, (err,found) => {
+		Bot.find({name: "bot", "manager.user_id" : req.user._id}, (err,found) => {
 			res.render('pages/bot_list', {data:found, active_bot_id: active_bot_id});
 		})
 	}
@@ -31,7 +33,7 @@ class BotController extends Controller {
 	static async editBot(req, res) {
 		const id = req.params.id;
 
-		Bot.findOne({_id: id}, (err, data) => {
+		Bot.findOne({_id: id, "manager.user_id" : req.user._id}, (err, data) => {
 			res.render('pages/bot_edit.ejs', {data: data});
 		})
 	}
@@ -70,7 +72,7 @@ class BotController extends Controller {
 			data.image = imageurl + "/" + req.file.filename;
 		}else{
 			if(req.body.currentimage == ''){
-				data.image = '/image/bot-face.jpg';
+				data.image = '';
 			}else{
 				data.image = req.body.currentimage;
 			}
@@ -79,7 +81,7 @@ class BotController extends Controller {
 		if(id != ''){
 			//Update new Bot
 			id = new ObjectId(id);
-			Bot.findOne({_id: id}, function(err, found){
+			Bot.findOne({_id: id, "manager.user_id" : req.user._id}, function(err, found){
 				if(err) throw err;
 				found.bot_name = data.bot_name;
 				found.description = data.description;
@@ -183,7 +185,7 @@ class BotController extends Controller {
 
 		function FindAndInsert(model, newid){
 			return new Promise(function(ok, notok){
-				model.find({_id: id}, (err, data) => {
+				model.find({_id: id, "manager.user_id" : req.user._id}, (err, data) => {
 					if(err) throw err;
 					if(data[0] == null){
 						ok();
@@ -203,9 +205,9 @@ class BotController extends Controller {
 
 		const id = req.body.id;
 		//If image is not use for another Bot => Delete Image
-		Bot.find({_id: id}, (err, result) => {
+		Bot.find({_id: id, name: "bot", "manager.user_id" : req.user._id}, (err, result) => {
 			
-			Bot.remove({_id: id}, (err) => {
+			Bot.remove({_id: id, name: "bot", "manager.user_id" : req.user._id}, (err) => {
 				Content.remove({_id: id}, (err) => {
 					Communication.remove({_id: id}, (err) => {
 						if(err){
@@ -275,7 +277,7 @@ class BotController extends Controller {
 	
 	static activeBot(req, res) {
 		var id = req.query.id
-		Bot.findOne({_id: id, name: "bot"}, (err,found) => {
+		Bot.findOne({_id: id, name: "bot", "manager.user_id" : req.user._id}, (err,found) => {
 			if((found!= undefined) && (found!= null)) {
 				//Create bot folder
 				req.session.bot_id = id;

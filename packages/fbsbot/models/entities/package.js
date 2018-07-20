@@ -13,4 +13,4 @@ var packageSchema = mongoose.Schema({
 	pageToken: String,
 });
 
-module.exports = mongoose.model('FBConnectSchema', packageSchema, 'packages');
+module.exports = mongoose.model('FBConnectSchema', packageSchema, 'metadatas');

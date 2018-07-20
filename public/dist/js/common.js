@@ -13,3 +13,7 @@ function showErrorMessage(error) {
     $("#" +id + "").text(error[i].msg);
   }
 }
+
+$(function() { 
+	
+});

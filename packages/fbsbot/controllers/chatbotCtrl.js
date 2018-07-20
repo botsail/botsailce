@@ -5,23 +5,17 @@ const Common = require(global.appRoot + '/core/common');
 const { MessengerClient } = require('messaging-api-messenger');
 
 
-
-
-
-var client;
-var answer = null;
-
 class ChatbotController extends Controller {
     
-    static async loadConfig() {
+    static async loadConfig(bot_id) {
         //load config         
 		return new Promise((resolve, reject)=>{ 
-			FBConnectSchema.find({ "name": "fbsbot"}, function(err, fbConnectSchema){
+			FBConnectSchema.find({ "name": "fbsbot", "bot_id": bot_id}, function(err, fbConnectSchema){
 				if(err != null) {
 					reject(false);
 					return;
 				};
-				if(fbConnectSchema == null) return null;
+				if(fbConnectSchema == null) { reject(false); return null; }
 				let bot_id = "";
 				global.appChatbotEngineConfig = {};
 				let i = 0;
@@ -32,8 +26,6 @@ class ChatbotController extends Controller {
 					i++;
 				});
 				
-				
-				global.appFBChatbotEngineConfig = global.appChatbotEngineConfig;
 				resolve(true);
 			});
 		});
@@ -48,11 +40,11 @@ class ChatbotController extends Controller {
             global.appFBChatbotEngine = new ChatbotEngine();
         } 
 
-        await ChatbotController.loadConfig();
-        if((global.appFBChatbotEngineConfig == null) || (global.appFBChatbotEngineConfig.length == 0)) res.sendStatus(403);
+        if(Common.isset(global.appClient[bot_id]) == null) await ChatbotController.loadConfig(bot_id);
+        if((global.appChatbotEngineConfig == null) || (global.appChatbotEngineConfig.length == 0)) res.sendStatus(403);
         if (
             req.query['hub.mode'] === 'subscribe' &&
-            req.query['hub.verify_token'] === global.appFBChatbotEngineConfig[bot_id].validationToken
+            req.query['hub.verify_token'] === global.appChatbotEngineConfig[bot_id].validationToken
         ) {
             res.send(req.query['hub.challenge']);
         } else {
@@ -67,10 +59,10 @@ class ChatbotController extends Controller {
 		let bot_id = req.params.bot_id;
 		if(Common.isset(req.params.bot_id) != null) bot_id = req.params.bot_id;
 		
-        if(Common.isset(global.appFBChatbotEngineConfig[bot_id]) != null) {
+        if(Common.isset(global.appChatbotEngineConfig[bot_id]) != null) {
 			ChatbotController.query(req, res, bot_id);
 		} else {
-			ChatbotController.loadConfig().then(result => {
+			ChatbotController.loadConfig(bot_id).then(result => {
 				ChatbotController.query(req, res, bot_id);
 			});
 		}
@@ -80,8 +72,9 @@ class ChatbotController extends Controller {
 	static  query(req, res, bot_id) {
 		if(Common.isset(global.appClient) == null)  return;
 		if(Common.isset(global.appClient[bot_id]) == null) { res.status(200).end(); return; }
+
 		
-		client = global.appClient[bot_id];
+		var client = global.appClient[bot_id];
         const event = req.body.entry[0].messaging[0];
         const userId = event.sender.id;
 
@@ -130,7 +123,7 @@ class ChatbotController extends Controller {
 		if(Common.isset(req.query.query_string) != null) query_string = req.query.query_string;
 		global.appFBChatbotEngine.setTesting(true);
 		
-		client = global.appClient[bot_id];
+		
 		let data = {
 			time: null,
 			who: 'guest',
@@ -144,10 +137,12 @@ class ChatbotController extends Controller {
 		};
 		let userId = "botsail";
 		
-		if(Common.isset(global.appFBChatbotEngineConfig[bot_id]) != null) {
+		if(Common.isset(global.appChatbotEngineConfig[bot_id]) != null) {
+			let client = global.appClient[bot_id];
 			global.appFBChatbotEngine.query(res,client, userId, query_string, content, bot_id);
 		} else {
 			ChatbotController.loadConfig().then(result => {
+				let client = global.appClient[bot_id];
 				global.appFBChatbotEngine.query(res,client, userId, query_string, content, bot_id);
 			});
 		}
@@ -181,37 +176,7 @@ class ChatbotController extends Controller {
                 })
 		});
 	}
-	/*
-	static async getCom() {
-		let result = await FBConnectSchema.find({ "name": "fbsbot"});;
-		return result;
-	}
-	*/
-	/*
-	static async query(res,client, userId, event, content, bot_id) {
-		global.appFBChatbotEngine.query(userId, event.message.text, bot_id)
-		.then((answer)=>{
-			if(Common.isset(answer) != null) {
-				if(answer.type == "Content") ChatbotController.sendContentAnswer(res, client, userId, event, answer);
-				if(answer.type == "Block") ChatbotController.sendBlockAnswer(res, client, userId, event, answer);
-				if(answer.type == "") ChatbotController.sendTextToUser(client, userId, "Hello world");
-			} else if(answer.type == "") ChatbotController.sendTextToUser(client, userId, "Hello world 1");
-		});
-		
-		
-		let comm = await Comm.findOne({bot_id : bot_id, uid: sender.id, type: 'messager'});
-		if(Common.isset(comm) != null) {
-			Chatbot.addCom(comm, bot_id);
-		} else {
-			user = await client.getUserProfile(sender.id);
-			content.gender = user.gender;
-			if(Common.isset(user.fullname) == null) content.fullname = user.first_name + ' ' + user.last_name
-			else content.fullname = user.fullname;
-			await Chatbot.addCom(content, bot_id);
-		}
-		
-	}
-	*/
+	
     
 }
 

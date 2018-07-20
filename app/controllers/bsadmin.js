@@ -1,8 +1,6 @@
 var User            = require('../models/entities/user');
 var Metadata            = require('../models/entities/metadata');
 var Controller            = require(global.appRoot + '/core/controller');
-var BSPatternEngine = require(global.appRoot + '/packages' + '/BSPatternEngine/bspatternengine');
-var Cache            = require(global.appRoot + '/core/util/cache');
 var fs = require('fs');
 
 class BSAdminController extends Controller {
@@ -18,16 +16,6 @@ class BSAdminController extends Controller {
 
 	//Home page
 	static async home(req, res) {
-		/*
-		let bsPatternEngine = new BSPatternEngine();
-		let answer = await bsPatternEngine.query(111,"mấy giờ rồi");
-		if(answer == null) answer = "Tôi giúp gì được cho bạn";
-		*/
-/*
-		let data = await Cache.setKey('12344444', {a: "sdfeds4444", b: 22323222});
-		let data2 = await Cache.getValue('1234');
-*/
-		//let obj = await DashboardProcess.getDashboarData();
 
 		res.render('pages/home.ejs', {
 			error : req.flash("error"),
@@ -41,9 +29,6 @@ class BSAdminController extends Controller {
 	
 	//Signup page
 	static signup(req, res) {
-		var Update = require(global.appRoot + '/core/util/updatemodule');
-		//Update.updateNguyen();
-
 		if (req.session.user) {
 
 			res.redirect('/home');
@@ -103,11 +88,26 @@ class BSAdminController extends Controller {
 
 	//Menu json 
 	static menu(req, res) {
+		if(Controller.prototype.getBotID() != null) {
+			Metadata.findOne({"content": "system-menu", "system": "core"},function(err,result){
+				if (err) res.send(JSON.stringify({ 'return': '0' }, null, 3));	 
+				res.send(result.data);	
+			});
+		} else {
+			let obj = [{
+				"id" : "10",
+				"level" : "system-menu",
+				"name" : "Home",
+				"url" : "/home",
+				"parent_id" : "-1",
+				"css_class" : "fa fa-area-chart",
+				"authenticate" : true,
+				"plugin" : "system"		
+			}];
 			
-		Metadata.findOne({"content": "system-menu", "system": "core"},function(err,result){
-	        if (err) res.send(JSON.stringify({ 'return': '0' }, null, 3));	 
-			res.send(result.data);	
-		}); 
+			res.send(obj);
+		}
+		 
 		
 	}
 	

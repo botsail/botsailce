@@ -65,7 +65,7 @@ class Attributes {
                 Create_User_list(bot, attribute_name,att_id);            
             })        
             .then(()=>{
-                resolve();// return
+                resolve(true);// return
             })
             .catch(err=>{       
                 reject(err.message); // if err
@@ -79,7 +79,7 @@ class Attributes {
                 botconfig.findOne({_id:bot, 'user_attribute.name':attribute_name})
                 .then(data=>{
                     if(data){
-                        resolve();
+                        resolve(true);
                     }else{
                         reject('Not have attribute name');
                     }
@@ -94,15 +94,15 @@ class Attributes {
                     value : value,    
                 });
                 userAttribute.findOneAndUpdate({bot_id:bot,attribute_name:attribute_name },{$push:{data:data}})//save
-                .then(()=>{
-                    resolve();// return
+                .then((data)=>{
+                    resolve(data);// return
                 })
                 .catch(err=>{
-                    reject(err.message);//if err
+                    reject(err);//if err
                 })
             })
             .catch(err=>{
-                reject(err.message);//if err
+                reject(err);//if err
             })
         })
     }
@@ -115,15 +115,10 @@ class Attributes {
                 data:{$elemMatch:{uid:uid}}, 
             },{'data.$':1})
             .then(data=>{
-                if(data!=""){
-
-                    resolve(JSON.stringify(data));
-                }else{
-                    reject('Not found');
-                }           
+                resolve(data);          
             })
             .catch(err=>{
-                reject(err.message);
+                reject(false);
             })
         })
     }
@@ -134,10 +129,10 @@ class Attributes {
                 {bot_id:bot,attribute_name:attribute_name},
                 {$pull: {data:{uid:uid}}})
                 .then(()=>{
-                    resolve();
+                    resolve(true);
                 })
                 .catch(err=>{
-                    reject(err.message);
+                    reject(false);
                 })
         })
     }
@@ -147,11 +142,11 @@ class Attributes {
             userAttribute.findOneAndUpdate(
                 {bot_id:bot,attribute_name:attribute_name,data:{$elemMatch:{uid:uid}}},
                 {$set: {'data.$.value':value}})//set value new
-                .then(()=>{
-                    resolve();
+                .then((data)=>{
+                    resolve(data);
                 })
                 .catch(err=>{
-                    reject(err.message);
+                    reject(err);
                 })
         })
     }
@@ -180,7 +175,7 @@ class Attributes {
                     resolve();
                 })
                 .catch(err=>{
-                    reject(err.message);
+                    reject(err);
                 })
             })
         }
@@ -191,10 +186,10 @@ class Attributes {
                     {$set:  {attribute_name: new_name}}
                 )
                 .then(()=>{
-                    resolve();
+                    resolve(true);
                 })
                 .catch(err=>{
-                    reject(err.message);
+                    reject(err);
                 })
 
             })
@@ -207,7 +202,7 @@ class Attributes {
                 resolve('Data saved!');//return
             })
             .catch(err=>{
-                reject(err.message); // if err
+                reject(err); // if err
             })
         })
     }
@@ -235,7 +230,7 @@ class Attributes {
 				
 			})
 			.catch(err=>{
-                reject(err.message); // if err
+                reject(err); // if err
             })
 			
 			
@@ -253,7 +248,7 @@ class Attributes {
                     if(data){
                         reject('Same name attribute');
                     }else{
-                        resolve();
+                        resolve(true);
                     }
                 })
             })
@@ -268,10 +263,10 @@ class Attributes {
                 return botconfig.findOneAndUpdate({_id:bot},{$push:{bot_attribute:data}})
             })
             .then(()=>{
-                resolve('Save bot attribute!');
+                resolve(data);
             })
             .catch(err=>{
-                reject(err.message);
+                reject(err);
             })
         })
     }
@@ -285,9 +280,9 @@ class Attributes {
             },{'bot_attribute.$':1})
             .then(data=>{
                 if(data!=""){
-                    resolve(JSON.stringify(data));
+                    resolve(data);
                 }else{
-                    reject('Not found');
+                    reject(false);
                 }
                  
             })
@@ -303,11 +298,11 @@ class Attributes {
             botconfig.findOneAndUpdate(
                 {_id:bot},
                 {$pull: {bot_attribute:{name:name}}})
-                .then(()=>{
-                    resolve();
+                .then((data)=>{
+                    resolve(data);
                 })
                 .catch(err=>{
-                    reject(err.message);
+                    reject(err);
                 })
         })
     }
@@ -318,11 +313,11 @@ class Attributes {
             botconfig.findOneAndUpdate(
                 {_id:bot,'bot_attribute.name':name},
                 {$set: {'bot_attribute.$.value':value}})//set  new value
-                .then(()=>{
-                    resolve('Save done bot!');
+                .then((data)=>{
+                    resolve(data);
                 })
                 .catch(err=>{
-                    reject(err.message);
+                    reject(err);
                 })
         })
     }
@@ -334,9 +329,9 @@ class Attributes {
                 botconfig.findOne({_id:bot, 'bot_attribute.name':name})
                 .then(data=>{
                     if(data){
-                        reject('Same name attribute');
+                        reject(false);
                     }else{
-                        resolve();
+                        resolve(data);
                     }
                 })
             })
@@ -346,11 +341,11 @@ class Attributes {
             .then(()=>{
                 return botconfig.findOneAndUpdate({_id:bot,'bot_attribute.name':old_name},{$set: {'bot_attribute.$.name':new_name}})//set new name
             })
-            .then(()=>{
-                resolve('Save done bot!');
+            .then((data)=>{
+                resolve(data);
             })
             .catch(err=>{
-                reject(err.message);
+                reject(err);
             })
         })
     }
@@ -374,7 +369,7 @@ class Attributes {
 				resolve(dataJson);
 			})
 			.catch(err=>{
-				reject(err.message);
+				reject(err);
 			})
 		})
 	}

@@ -1,6 +1,9 @@
 const Attributes = require(global.appRoot + "/core/attribute.js");
 const { MessengerClient } = require('messaging-api-messenger');
 const Cache            = require(global.appRoot + '/core/util/cache');
+var Common = require(global.appRoot + "/core/common.js");
+const request = require('request');
+const userAttribute = require(global.appRoot+ '/app/models/entities/userattribute');
 
 class RuntimeAPI {
 	
@@ -83,27 +86,31 @@ class RuntimeAPI {
 		let dataList = await this.callHttpRequest(options);
 		
 		if((Common.isset(dataList) != null) && (Common.isset(_receive) != null)){
+			let receive_data = await userAttribute.find({"bot_id": this.bot_id, _id : { "$in" : _receive }}); 
 			for(let i = 0; i < _receive.length; i++) {
-				if(Common.isset(dataList[_receive[i]]) != null) 
-					await this.updateUserValueAttributes(_receive[i],uid, dataList[_receive[i]]);
+				if(Common.isset(dataList[receive_data[i].attribute_name]) != null) 
+					await this.updateUserValueAttributes(receive_data[i].attribute_name,uid, dataList[receive_data[i].attribute_name]);
 			}
 		}
 	}
 	
 	//Send request to other website via URL
 	async callHttpRequest(requestData) {
-		const request = require('request');
-		return new Promise(function (resolve, reject) {
-			request(requestData, function (error, res, body) {
-				if (!error && res.statusCode == 200) {
-					resolve(body);
-				} else {
-					reject(error);
-				}
+		try {
+			const request = require('request');
+			return new Promise(function (resolve, reject) {
+				request(requestData, function (error, res, body) {
+					if (!error && res.statusCode == 200) {
+						resolve(body);
+					} else {
+						reject(error);
+					}
+				});
 			});
-		});
-
+		} catch(ex) { console.dir(ex); return false;}
+		return [];
 	}
+	
 	
 	async createUserAttribute(attribute_name) {
 		return await this.attributes.createUserAttribute(this.bot_id, attribute_name);
@@ -123,12 +130,23 @@ class RuntimeAPI {
 	}
 	
 	async updateUserValueAttributes(attribute_name,uid, value) {
-		let result = await this.attributes.updateUserValueAttributes(this.bot_id,attribute_name,uid, value);
+		
+		let userAttributes = await this.attributes.getUserAttributes(this.bot_id, attribute_name,uid);
+		
+		//Current attributes of uid not set
+		if((userAttributes == null) || (userAttributes.length == 0)) {
+			userAttributes = await this.attributes.addUserAttributes(this.bot_id, attribute_name,uid, value);
+		} else if((userAttributes != null) && (userAttributes.length > 0)) {
+			userAttributes = await this.attributes.updateUserValueAttributes(this.bot_id,attribute_name,uid, value);
+		}
+		/*
+		let resultUpdate = await this.attributes.updateUserValueAttributes(this.bot_id,attribute_name,uid, value);
 		const UserAttribute            = require(global.appRoot + '/app/models/entities/userattribute');
-		let result = UserAttribute.findOne({bot_id: this.bot_id,datatype: "UserAttribute", name: name});
-		if((result != undefined) || (result != null)) {
+		let result = await UserAttribute.findOne({bot_id: this.bot_id,datatype: "UserAttribute", attribute_name: attribute_name});
+		*/
+		if(Common.isset(userAttributes) != null) {
 			try {
-				let functionStr = result.trigger;
+				let functionStr = userAttributes.trigger;
 				let deny = this.checkDenyFunction(functionStr);
 				if(deny != null) return deny;
 				eval(functionStr);
@@ -139,7 +157,7 @@ class RuntimeAPI {
 		}
 		
 		
-		return result;
+		return true;
 	}
 	
 	async updateUserAttributesName(old_name, new_name){

@@ -1,8 +1,7 @@
-var Content            = require(global.appRoot +'/app/models/entities/content');
 var Common 			= 	require(global.appRoot + "/core/common.js");
 var BotSailBase = require(global.appRoot + "/core/botsailbase");
 
-class DashboardProcess extends BotSailBase {
+class PackageProcess extends BotSailBase {
 	static async getDashboarData() {
 		let obj = {};
 		obj['topicCnt'] = 1;//await Topic.count();
@@ -15,4 +14,4 @@ class DashboardProcess extends BotSailBase {
 
 }
 
-module.exports = DashboardProcess;
+module.exports = PackageProcess;

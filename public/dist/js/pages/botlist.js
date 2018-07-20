@@ -94,6 +94,15 @@ function deletebot(id){
   });
 }
 
+function loadActionPage() {
+	$.ajax({
+        type: "GET",
+        url: "/json",
+        success: function(){
+            window.location.href = "/content/show";
+        }
+    })
+}
 
 function develop_bot(id, name){
     $.ajax({
@@ -106,9 +115,9 @@ function develop_bot(id, name){
                       showConfirmButton: false,
                       timer: 2000
                   }).then((value) => {
-				  window.location.href = "/content/show";
+				  loadActionPage();
 				}).catch(error => {
-				  window.location.href = "/content/show";
+				  loadActionPage();
 				})
         }
     })

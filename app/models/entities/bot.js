@@ -24,7 +24,8 @@ var botSchema = mongoose.Schema({
         value: { type: String },
     }],
 	ym: String,
-	user_public_folder: String
+	user_public_folder: String,
+	status : { type: String, default: "active" },
 });
 
 

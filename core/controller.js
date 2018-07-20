@@ -20,7 +20,9 @@ class Controller extends BotSailBase {
 	}
 	
 	getBotID() {
-		if((Common.isset(this.req.session) != null) && ((this.req.session.bot_id) != null)) return this.req.session.bot_id;
+		try {
+		if((Common.isset(this.req.session) != null) && (Common.isset(this.req.session.bot_id) != null) && (Common.isset(this.req.session.bot_id) != "") ) return this.req.session.bot_id;
+		} catch(ex) { console.dir(ex); }
 		return null;
 	}
 

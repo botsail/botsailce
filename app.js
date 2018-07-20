@@ -93,7 +93,7 @@ fs.readdirSync(routePath).forEach(function(file) {
 
 
 Package.findOne({"type": "chatbot-engine", "status": "active"},function(err,result){
-	global.appFBChatbotEngineConfig = {};
+	global.appChatbotEngineConfig = {};
 	global.appClient = {};
 
     global.serverUrl = constant.host;

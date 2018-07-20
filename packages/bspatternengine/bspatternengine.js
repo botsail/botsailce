@@ -71,6 +71,7 @@ class BSPatternEngine extends Engine {
 				}
 			});
 		} catch(ex) { 
+			console.dir(ex);
 			myself.sendTextToUser(client,  userId, ". . . ");
 		}
 		
@@ -192,6 +193,7 @@ class BSPatternEngine extends Engine {
 				});
             }
         }catch(ex) {
+			console.dir(ex);
             this.sendTextToUser(client, userId, query_string);
         }
         
@@ -201,25 +203,34 @@ class BSPatternEngine extends Engine {
         try {
 			//if single message
 			let respone = [];
-			this.runScript(answer.value, bot_id, client);
+			this.runScript(answer.value, bot_id, client, userId);
 			this.createTextMessage(userId,answer.value,respone);
 			this.createGenericTemplate(userId,answer.value,respone);
 			if(this.testing == true) { this.res.send(JSON.stringify(respone)); return;}
 			client.sendBatch(respone);// Send respone
 			this.res.status(200).end();
         }catch(ex) {
+			console.dir(ex);
             this.sendTextToUser(client, userId, query_string);
         }
         
     }
 	
 	
-	runScript(answer, bot_id, client) {
+	async runScript(answer, bot_id, client, userId) {
 		let runtimeAPI = new RuntimeAPI(bot_id, client)
-		for(let i = 0; i < answer.length; i++) {
-			if(answer[i].type == "jsscript") runtimeAPI.runSanbox(answer[i].jsscript);
-		}
+		try {
+			for(let i = 0; i < answer.length; i++) {
+				if(answer[i].type == "jsscript") await runtimeAPI.runSanbox(answer[i].jsscript);
+				if(answer[i].type == "request") await runtimeAPI.doRequest(answer[i].action, answer[i].url, answer[i].paramater, answer[i].receive, userId);
+			}
+		} catch(ex) {
+			console.dir(ex);
+			this.sendTextToUser(client,  userId, ". . . .");
+        }
+		
 	}
+	
 
     //this function is to send text to user
     sendTextToUser(client, userId, content) {
@@ -288,17 +299,20 @@ class BSPatternEngine extends Engine {
 				}
 		  }
 		}
-		//Make form for respone from object
-		let gallery = this.batchgallery(groupid);
-		//Make form for respone from object
-		image = this.batchimage(image);
+		
+		if(groupid.length > 0) {
+			//Make form for respone from object
+			let gallery = this.batchgallery(groupid);
+			//Make form for respone from object
+			image = this.batchimage(image);
 
-		for(var i=0;i<image.length;i++){
-		  respone.push(MessengerBatch.sendGenericTemplate(sender, [image[i]],{ image_aspect_ratio: 'square'}));
-		}
-		for (var property1 in gallery) {
-		  console.log(gallery[property1]);
-		  respone.push(MessengerBatch.sendGenericTemplate(sender, gallery[property1],{ image_aspect_ratio: 'square'}));
+			for(var i=0;i<image.length;i++){
+			  respone.push(MessengerBatch.sendGenericTemplate(sender, [image[i]],{ image_aspect_ratio: 'square'}));
+			}
+			for (var property1 in gallery) {
+			  console.log(gallery[property1]);
+			  respone.push(MessengerBatch.sendGenericTemplate(sender, gallery[property1],{ image_aspect_ratio: 'square'}));
+			}
 		}
 	}
 
@@ -360,14 +374,18 @@ class BSPatternEngine extends Engine {
 				button: []
 			}
 			//Button
-		  for(var j=0; j<obj[i].button.length;j++){
-				let button = {
-					type : obj[i].button[j].type,
-					title : obj[i].button[j].title,
-					url : obj[i].button[j].url,
+			
+			if(Common.isset(obj[i].button) != null) {
+				for(var j=0; j<obj[i].button.length;j++){
+					let button = {
+						type : obj[i].button[j].type,
+						title : obj[i].button[j].title,
+						url : obj[i].button[j].url,
+					}
+					use.button.push(button);
 				}
-				use.button.push(button);
 			}
+		    
 			
 		  usedata.push(use);
 		}
@@ -385,6 +403,7 @@ class BSPatternEngine extends Engine {
 			try {
 				eval(patternData.callback);	
 			} catch(ex) { 
+				console.dir(ex);
 				return null;
 			}
 			
@@ -401,7 +420,7 @@ class BSPatternEngine extends Engine {
 			}
 
 		} catch(ex) {
-			console.log(ex);
+			console.dir(ex);
 			return null;
 		}
 

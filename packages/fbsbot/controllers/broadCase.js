@@ -8,12 +8,8 @@ var Broadcase = require(global.appRoot + '/packages/fbsbot/models/entities/confi
 
 var Communication = require(global.appRoot + '/app/models/entities/communication');
 
-var chatbotCtrl = require(global.appRoot + '/packages/fbsbot/controllers/chatbotCtrl');
 
-var pageAccessToken = 'EAAbDiy3KJSkBAJqApRqIbSvJ1kr3EaIZCJrkZB6uczpDJKyZB6QQT5kx7DbjJ6pQZCvro76xNhvUXzRMVH8V1Gwv3dSKFoBW8acOv3bUBsPD7byn0zoIZCBn3Rh7dvD1qtamUZBnCRmZAfbto3EZAg887GgPJQTI3YXl7Ti3EInRVQZDZD';
-
-var { MessengerClient } = require('messaging-api-messenger');
-var client = MessengerClient.connect(pageAccessToken);
+var client = null;
 
 class BroadcaseController extends Controller {
 
@@ -37,7 +33,13 @@ class BroadcaseController extends Controller {
 
   static addBroadcaseData(req, res){
     let { broadCase } = req.body;
-
+	let bot_id = req.params.bot_id;
+	if(Common.isset(global.appClient) == null)  return;
+	if(Common.isset(global.appClient[bot_id]) == null) { res.status(200).end(); return; }
+	
+	client = global.appClient[bot_id];
+		
+		
     Broadcase.findOneAndUpdate({name: 'facebook-broadcase'}, {$push: {data: broadCase}})
     .then(success => {
       if(success){
@@ -56,7 +58,7 @@ class BroadcaseController extends Controller {
         })
       }
       broadCase.member.forEach(uid => {
-        chatbotCtrl.sendTextToUser(client, uid, broadCase.content);
+        global.appFBChatbotEngine.sendTextToUser(client, uid, broadCase.content);
       })
       
     Chatbot.saveMsgBotSendToUser(broadCase.member, broadCase.content);

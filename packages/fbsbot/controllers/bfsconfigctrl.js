@@ -12,14 +12,18 @@ class FBSConfigController extends Controller {
 			if(Common.isset(constants.host)) host = constants.host+ "/fbsbot/webhook/" + Controller.prototype.getBotID()
 			if(Common.isset(result) == null)  {
 				configData = {
-					bot_id: host,
+					webhook: host,
+					bot_id: Controller.prototype.getBotID(),
 					//pageID: '',
 					appID: '',
 					appSecret: '',
 					validationToken: '',
 					pageToken: ''
 				}
-			} else configData = result;
+			} else { 
+				configData = result;
+				configData["webhook"] = host;
+			}
 
 	        let viewsPath = global.appRoot + '/packages/fbsbot/views/fbconfig.ejs';
 			

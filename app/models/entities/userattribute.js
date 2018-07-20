@@ -6,7 +6,6 @@ const userAttributeSchema = mongoose.Schema({
 	bot_id: mongoose.Schema.Types.ObjectId,
 	name: String,
 	datatype: { type : String , "default" : "UserAttribute" },
-	bot_id: {type: mongoose.Schema.Types.ObjectId},
 	attribute_name: String,
 	data: { type : Array , "default" : [] },
 	script: { type : String , "default" : "" },
