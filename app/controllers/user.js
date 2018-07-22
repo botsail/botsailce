@@ -18,11 +18,7 @@ var constants = require(global.appRoot + '/config/constants');
 
 
 
-
-var transporter = nodemailer.createTransport(smtpTransport({
-    host: constants.email_smtp_host,
-    port: constants.email_smtp_port,
-}));
+var transporter = nodemailer.createTransport(smtpTransport(constants.smtpConfig));
 
 
 const success_chang_pass = {
@@ -58,10 +54,10 @@ class UserController extends Controller{
                 }
             });
     }
-	
+
     //save information user
     static save(req, res){
-        
+
 		Controller.prototype.setResponse(req,res);
 
 
@@ -74,15 +70,15 @@ class UserController extends Controller{
 				//if password not true
 				if(!user.validPassword(data.password)) {
 					let error = [{"location":"params","param":"password","msg":"Password Not Match"}];
-					return Controller.prototype.sendError(error); 
-				}                      
+					return Controller.prototype.sendError(error);
+				}
 
 				req.check('new_password','Password to short').isLength({min:6});
 				req.check('re_new_password','New Password not match').equals(data.new_password);
 
 			}
 
-			// validator user information ============================ 
+			// validator user information ============================
 			//validator phone
 			if(data.phone){
 				req.check('phone', 'Not a phone').matches(/^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/g);
@@ -92,7 +88,7 @@ class UserController extends Controller{
 
 			var errors = req.validationErrors();
 			if(errors != false) {
-				return Controller.prototype.sendError(errors);     
+				return Controller.prototype.sendError(errors);
 			}else{
 				user.gender= data.gender;
 				user.full_name = data.full_name;
@@ -131,7 +127,7 @@ Date: 17/05/2018
             success: req.flash("success"),
         });
     }
-	
+
     static async resetpass(req,res){
         Controller.prototype.setResponse(req, res);
 
@@ -165,10 +161,10 @@ Date: 17/05/2018
                             reject(new Error('Something misstake, try forgot password again'));
                         })
                     })
-                
+
             });
         }
-		
+
         function send_password(newpassword){
             return new Promise(function(resolve, reject){
                 let password = newpassword[0];
@@ -178,7 +174,7 @@ Date: 17/05/2018
                     from: constants.adminmail,
                     to: email,
                     subject: 'New password',
-                    html: 'Bạn ' + full_name + ' thân mến!' + "<br>" 
+                    html: 'Bạn ' + full_name + ' thân mến!' + "<br>"
                     + '<h3> Bạn vừa đặt lại password thành công, hiện tại password mới của bạn sẽ là: ' + password + '</h3>'
                   };
                 /*
@@ -193,8 +189,8 @@ Date: 17/05/2018
 					} else {
 						resolve();
 					}
-					
-					
+
+
 				});
             });
         }
@@ -219,15 +215,15 @@ Date: 17/05/2018
         }
 
     }
-	
+
 	//check email token
 	static check_email(req){
 		return new Promise(function(resolve, reject){
 			User.findOne({'email': req.body.email})
 			.then(user=>{
 				let tomorrow = new Date();
-				tomorrow.setDate(tomorrow.getDate() + 1);       
-				user.active_hash_times.token = user.generateHash(req.body.email);                   
+				tomorrow.setDate(tomorrow.getDate() + 1);
+				user.active_hash_times.token = user.generateHash(req.body.email);
 				user.active_hash_times.date = tomorrow;
 				user.save()
 				.then(success=>{
@@ -242,7 +238,7 @@ Date: 17/05/2018
 			})
 		});
 	}
-	
+
 	// send token to email user
 	static send_email(token){
 		return new Promise(function(resolve, reject){
@@ -258,8 +254,8 @@ Date: 17/05/2018
 				+ 'lại mật khẩu mới cho bạn ngay lâp tức'
 				+ " Link tạo mật khẩu mới: <a href=\'http://localhost:8042/bs-admin/resetpass?email="
 				+ email + "&token=" + token_send +"'\>Link</a>" + '<br>'
-				+ 'Nếu link không thành công thì hay nhập địa chỉ sau vào website của bạn: http://localhost:8042/bs-admin/resetpass?email=' 
-				+ email + "&token=" + token_send   
+				+ 'Nếu link không thành công thì hay nhập địa chỉ sau vào website của bạn: http://localhost:8042/bs-admin/resetpass?email='
+				+ email + "&token=" + token_send
 			  };
 			 /*
 			mailgun.messages().send(mail, function (error, body) {
@@ -274,8 +270,8 @@ Date: 17/05/2018
 				} else {
 					resolve();
 				}
-				
-				
+
+
 			});
 		});
 	}
@@ -288,7 +284,7 @@ Date: 17/05/2018
             //await check_recaptcha(req);
             let token = await UserController.check_email(req);
             await UserController.send_email(token);
-            
+
             req.flash('success', 'Reset password success, check your email!!');
             res.render("pages/lostpass.ejs",{
                 error : req.flash("error"),

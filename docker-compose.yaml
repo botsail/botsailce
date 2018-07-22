@@ -5,9 +5,6 @@ services:
   mongo:
     image: mongo
     restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
     volumes:
       - ./docker/database:/data/db
 
@@ -25,9 +22,6 @@ services:
     restart: always
     ports:
       - 8081:8081
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: example
     depends_on:
       - mongo
 
@@ -37,23 +31,20 @@ services:
     restart: always
     ports:
       - 3000:3000
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: example
     volumes:
       - ./app:/var/botsailce/app:Z
       - ./app.js:/var/botsailce/app.js:Z
-      - ./config:/var/botsailce/config:Z
       - ./core:/var/botsailce/core:Z
       - ./lib:/var/botsailce/lib:Z
       - ./packages:/var/botsailce/packages:Z
       - ./public:/var/botsailce/public:Z
       - ./routers:/var/botsailce/routers:Z
       - ./package.json:/var/botsailce/package.json:Z
+      # - ./config:/var/botsailce/config:Z
 
       # patch for docker
-      - ./docker/config/db.docker.js:/var/botsailce/config/database.js
-      - ./docker/app-entrypoint.sh:/var/entrypoint.sh:Z
-    entrypoint: /var/entrypoint.sh
+      - ./docker/config:/var/botsailce/config:Z
+      - ./docker/app-entrypoint.sh:/var/app-entrypoint.sh:Z
+    entrypoint: /var/app-entrypoint.sh
     depends_on:
       - mongo

@@ -8,4 +8,4 @@ unzip -o Database.zip
 
 sleep 3
 
-mongorestore -u root -pexample -h mongo:27017 /var/temps/Database
+mongorestore --host mongo --port 27017 /var/temps/Database
