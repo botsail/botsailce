@@ -5,4 +5,5 @@
 
 /temps/Database
 /docker/database
+/docker/config
 .DS_Store
