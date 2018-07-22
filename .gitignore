@@ -2,3 +2,7 @@
 /config/constants.js
 /public/uploads/users/
 /public/uploads/bots/
+
+/temps/Database
+/docker/database
+.DS_Store
