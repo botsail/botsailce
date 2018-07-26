@@ -90,6 +90,10 @@ fs.readdirSync(routePath).forEach(function(file) {
     var route=routePath+file;
     require(route)(app, passport);
 });
+app.use(function(req, res, next) {
+  if((req.session != undefined) && (req.session != null) && (req.session.user != undefined)) res.locals.user = req.session.user;
+  next();
+});
 
 
 Package.findOne({"type": "chatbot-engine", "status": "active"},function(err,result){
