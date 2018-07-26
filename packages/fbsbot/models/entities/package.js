@@ -11,6 +11,7 @@ var packageSchema = mongoose.Schema({
 	appSecret: String,
 	validationToken: String,
 	pageToken: String,
+	tags: [String],
 });
 
 module.exports = mongoose.model('FBConnectSchema', packageSchema, 'metadatas');

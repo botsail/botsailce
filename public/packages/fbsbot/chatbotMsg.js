@@ -3,7 +3,7 @@ const checkedLastMsgArr = [];
 
 $(() => {
     //set event for back btn
-    $('.btn-back').on('click', () => location.href = '/broadcase');
+    $('.btn-back').on('click', () => location.href = '/fbsbot/broadcase');
     //event for send btn
     $('#btnSend').on('click', showBroadcaseModal);
 
@@ -59,7 +59,7 @@ function renderTableLastMsg(data) {
                     </td>
                     <td>${lastMsg.fullname}</td>
                     <td>${lastMsg.gender}</td>
-                    <td>${lastMsg.data[0].message}</td>
+                    <td>${lastMsg.last_message}</td>
                     <td>${getDateFormat(lastMsg.data[0].time)}</td>
                     <td>
                         <button class="btn btn-primary" onClick = "getAllMsgUser('${lastMsg._id}')">Open</button>

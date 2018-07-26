@@ -2,6 +2,8 @@ var User            = require('../models/entities/user');
 var Metadata            = require('../models/entities/metadata');
 var Controller            = require(global.appRoot + '/core/controller');
 var fs = require('fs');
+const Cookie = require('cookie');
+const UpdatemModule = require('../../core/util/updatemodule')
 
 class BSAdminController extends Controller {
 	static verifyAuth(req, res, next) {
@@ -48,6 +50,7 @@ class BSAdminController extends Controller {
 	static login(req, res) {
 
 		if (req.session.user) {
+
 			//check user folder
 			try {
 				let data = req.session.user;
@@ -63,7 +66,6 @@ class BSAdminController extends Controller {
 			}catch(ex) {
 				console.log("user folder not found: "+ req.session.user._id);
 			}
-			
 
 			res.redirect('/home');
 
@@ -80,7 +82,18 @@ class BSAdminController extends Controller {
 	
 	//logout page
 	static logout(req, res) {
-		req.session.user = null;
+		// Clear cookie
+		res.setHeader("Set-Cookie", [      
+			Cookie.serialize('cbv', 0.1, {
+			expires: new Date(0),
+			path: '/'
+		}),
+		  Cookie.serialize('cbu', true, {
+			expires: new Date(0),
+			path: '/'
+		})]);
+		
+		req.session.destroy();
 		res.redirect('/login');
 	}
 
@@ -108,9 +121,33 @@ class BSAdminController extends Controller {
 			res.send(obj);
 		}
 		 
-		
 	}
 	
+	static updateToVersion(req, res) {
+
+		if((req.query.v > req.cookies.cbv) & (req.session.user.email == "root")){
+
+			var urlupdate =  'http://api.botsail.org?get-bs-update?cbv=' + req.cookies.cbv + '&nbv=' + req.query.v;
+			var proccess = new UpdatemModule();
+
+			proccess.update(urlupdate, '/', function(){
+
+				res.setHeader("Set-Cookie", [
+						Cookie.serialize('cbv', req.query.v, {
+						expires: new Date(Date.now() + 900000),
+						path: '/'
+					}),
+				  		Cookie.serialize('cbu', true, {
+						expires: new Date(0),
+						path: '/'
+					})]);
+
+				res.send('success');
+			});
+		}else{
+			res.send('error');
+		}
+	}
 	
 	
 	

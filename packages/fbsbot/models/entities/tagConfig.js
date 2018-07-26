@@ -1,13 +1,18 @@
 var mongoose = require('mongoose');
 
 var tagConfigSchema = mongoose.Schema({
-    name:{ type:String, default:'tag' },
-    data:[String],
-    system:{ type:String, default:'core' },
-    content:{ type:String, default:'tag' }
+    datatype: { type : String , "default" : "package-config" },
+	name: { type: String, default: "fbsbot" },
+	bot_id: mongoose.Schema.Types.ObjectId,
+	//pageID: String,
+	appID: String,
+	appSecret: String,
+	validationToken: String,
+	pageToken: String,
+	tags: [String],
 });
 
 
-const TagConfig = mongoose.model('tagConfig', tagConfigSchema, 'tagConfig');
+const TagConfig = mongoose.model('tagConfig', tagConfigSchema, 'metadatas');
 
 module.exports = TagConfig;

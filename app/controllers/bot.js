@@ -10,6 +10,8 @@ var fs = require('fs');
 var fse = require('fs-extra');
 var Common = require(global.appRoot + "/core/common.js");
 var dateFormat = require('dateformat');
+const Cookie = require('cookie');
+var Metadata            = require('../models/entities/metadata');
 
 class BotController extends Controller {
 	
@@ -218,9 +220,9 @@ class BotController extends Controller {
 							rimraf.sync(path);
 							if(id == Controller.prototype.getBotID()) {
 								req.session.bot_id = "";
-								res.send();
 							}
-							Controller.prototype.sendMessage("success");
+							//Controller.prototype.sendMessage("success");
+							res.send(200);
 						}
 					})
 				})
@@ -283,7 +285,32 @@ class BotController extends Controller {
 				req.session.bot_id = id;
 				req.session.bot_ym = found.ym;
 				BotController.createBotFolder(found);
-				res.send();
+				
+				Metadata.findOne({"content": "system-menu", "system": "core"},function(err,result){
+					let myMenu = JSON.stringify([{
+							"id" : "10",
+							"level" : "system-menu",
+							"name" : "Home",
+							"url" : "/home",
+							"parent_id" : "-1",
+							"css_class" : "fa fa-area-chart",
+							"authenticate" : true,
+							"plugin" : "system"		
+						}]);
+					
+					if((Common.isset(result) != null) && (Common.isset(result.data) != null)) myMenu = JSON.stringify(result.data);
+					
+					
+					res.setHeader('Set-Cookie', [      
+						Cookie.serialize('menu', myMenu, {
+						maxAge: 24 * 60 * 60 * 1000,
+						path: '/'
+					  })
+					]);
+					
+					res.send(result.data);	
+				});
+				
 			} 
 		})
 	}

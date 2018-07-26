@@ -4,7 +4,7 @@ var common = require('../../core/common');
 var rimraf = require('rimraf');
 
 class UpdateModule {
-	async update(url,foldertarget){
+	async update(url,foldertarget,callback){
 		console.log("Downloading.....");
 		var source = process.cwd() + '/temps/update' + (Date.now() / 1000);
 		var target = process.cwd();
@@ -17,7 +17,7 @@ class UpdateModule {
 		}
 
 		if(foldertarget != ''){
-			target = process.cwd() + '/' + foldertarget;
+			target = process.cwd() + foldertarget;
 		}
 		
 		//if target folder not exit, stop update process
@@ -31,8 +31,7 @@ class UpdateModule {
 			return false;
 		}
 		
-		
-		zipfile = await readDirPromise(source);
+		zipfile = await this.readDirPromise(source);
 		if(zipfile == false){
 			return false;
 		}
@@ -46,7 +45,7 @@ class UpdateModule {
 		}
 
 		//Delete File Zip download
-		filezip = await readDirPromise(source);
+		filezip = await this.readDirPromise(source);
 		if(filezip == false){
 			return false;
 		}
@@ -61,6 +60,7 @@ class UpdateModule {
 		ncp(source,target,function(err){
 			if (err) throw err;
 			//delete all file in temps
+			console.log(target);
 			fs.readdir(source,function(err,files){
 				for(var i = 0;i<files.length;i++){
 					var rmdir = source + '/' + files[i];
@@ -71,7 +71,10 @@ class UpdateModule {
 			})
 			
 			//remove temp folder
-			rimraf(source, function () { console.log('Updated done'); });
+			rimraf(source, function () { 
+				console.log('Updated done'); 
+				callback();
+			});
 			
 		})
 	}

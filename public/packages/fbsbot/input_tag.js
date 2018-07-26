@@ -8,7 +8,7 @@ $(() => {
     $('#txtSearchTagInputPage').keyup(filterData);
     $('#txtSearchTagInputPage').change(filterData);
     $('#btnSaveTagInputPage').click(addTagToUsers);
-    renderModalFrame();
+    //renderModalFrame();
     getAllUser()
 })
 
@@ -55,7 +55,7 @@ function renderTableLastMsgAndTag(data){
 
     data.forEach((user, index) => {
         let tags = ''
-        user.tag.forEach(t => tags += `${t}, `);
+        user.tags.forEach(t => tags += `${t}, `);
         tags = tags.substring(0, tags.length - 2);
         
         $tbody.append(`

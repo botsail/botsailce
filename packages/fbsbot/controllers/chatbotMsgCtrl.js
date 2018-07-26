@@ -1,7 +1,7 @@
 var Controller    = require(global.appRoot + '/core/controller');
 
 const Communication = require(global.appRoot + '/app/models/entities/communication');
-const LastMsg = require(global.appRoot + '/packages/fbsbot/models/entities/configsChatbot');
+const LastMsg = require(global.appRoot + '/app/models/entities/last_message');
 
 class ChatbotMsgController extends Controller{
 
@@ -11,10 +11,10 @@ class ChatbotMsgController extends Controller{
     }
 
     static getAllLastMsg(req, res){
-        LastMsg.find({name: 'last-message'})
+        LastMsg.find({type: 'messager', bot_id: req.session.bot_id})
         .then(success => {
             if(success) {
-                res.send({success: true, data: success[0].data});
+                res.send({success: true, data: success});
             } 
             else res.send({success: false, data: null});
         })

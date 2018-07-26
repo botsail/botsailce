@@ -136,6 +136,7 @@ class ChatbotController extends Controller {
 			data: data
 		};
 		let userId = "botsail";
+		if(Common.isset(req.query.userId) != null) userId = req.query.userId;
 		
 		if(Common.isset(global.appChatbotEngineConfig[bot_id]) != null) {
 			let client = global.appClient[bot_id];

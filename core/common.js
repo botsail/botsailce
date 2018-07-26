@@ -64,7 +64,7 @@ class Common {
 	}
 
 	//extract file
-	static async extract(filename, outputPath) {
+	static async extract(zipFile, outputPath) {
 		const stream = fs.createReadStream(zipFile).pipe(unzip.Extract({ path: outputPath }));
 		return new Promise((resolve, reject) => {
 			let hasError;

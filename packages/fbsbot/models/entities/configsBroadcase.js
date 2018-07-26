@@ -16,6 +16,6 @@ var broadcaseSchama = mongoose.Schema({
 });
 
 
-const Broadcase = mongoose.model('broadcase', broadcaseSchama, 'metadatas');
+const Broadcase = mongoose.model('broadcase', broadcaseSchama, 'communications');
 
 module.exports = Broadcase;

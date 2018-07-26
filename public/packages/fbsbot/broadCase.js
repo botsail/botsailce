@@ -1,6 +1,6 @@
 $(() => {
   //when user click btn broadcase
-  $('#btnBroadcase').click(() => location.href = '/chatbotMsg');
+  $('#btnBroadcase').click(() => location.href = '/fbsbot/chatbotMsg');
 
   getBroadcaseData();
 })

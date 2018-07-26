@@ -54,7 +54,7 @@ class BSPatternEngine extends Engine {
 					myself.answer.value.push(result.answer[R]);
 					myself.answer.type = "Content";
 					myself.promiseBook.updatePointStatus("query");
-					myself.messageTracking(query_string,client, bot_id, userId);
+					myself.messageTracking(query_string, bot_id, userId);
 				} else {
 					Block.findOne({bot_id : bot_id, datatype: "block", $where: "\"" + query_string +"\".match(this.query)"}, function(err, result){
 						if(err != null)  { 
@@ -63,7 +63,7 @@ class BSPatternEngine extends Engine {
 							myself.answer.value = result.value;
 							myself.answer.type = "Block";
 							myself.promiseBook.updatePointStatus("query");
-							myself.messageTracking(query_string,client, bot_id, userId);
+							myself.messageTracking(query_string, bot_id, userId);
 						}  else { 
 							myself.sendTextToUser(client,  userId, ". . . ");
 						}
@@ -78,17 +78,14 @@ class BSPatternEngine extends Engine {
 		
 	}
 	
-	messageTracking(message, bot_id, sender_id) {
+	async messageTracking(message, bot_id, sender_id) {
 		var myself = this;
-		Communications.findOne({bot_id : bot_id, uid: sender_id, type: 'messager'}, function(err, comm) {
-			if(Common.isset(comm) != null) {
-				//this.updateCom(message, bot_id, sender_id)
-				myself.promiseBook.updatePointStatus("messageTracking");
-			} else {
-				//this.addCom(message, bot_id, sender_id)
-				myself.promiseBook.updatePointStatus("messageTracking");
-			}
-		} );
+		let comm = await this.updateCom(message, bot_id, sender_id);
+		
+		if(Common.isset(comm) == null) {
+			await this.addCom(message, bot_id, sender_id);
+		}
+		this.promiseBook.updatePointStatus("messageTracking");
 		
 	}
 	
@@ -99,37 +96,26 @@ class BSPatternEngine extends Engine {
                                 who: 'guest',
                                 message: message
                             };
-		const newContent = await Communications.findOneAndUpdate({
-			uid: content.uid,
+		const upCom = await Communications.findOneAndUpdate({
+			uid: uid,
 			bot_id: bot_id
 		}, {
 			$push: {
 				data: data
-			}
+			},
+			last_message: message,
+			last_time_message: last_time,
 		}, {
 			new: true
 		});
-
-		const newLastmessage = 
-			{
-				time: last_time,
-				message: message
-			};
-
-		const lastMessage = await LastMessage.findOneAndUpdate({
-			datatype: 'last-message',
-			'data.uid': uid,
-			bot_id: bot_id
-		}, {
-			$set: {
-				'data.$.data-member': newLastmessage
-			}
-		});
+		
+		return upCom;
+		
 	}
 	
 	async addCom(message, bot_id, uid) {
 		let last_time = dateFormat(Date.now(), "yyyy-mm-dd HH:MM:ss");
-		let data = {
+		let content = {
 			type:'messager',
 			bot_id: bot_id,
 			uid:uid,
@@ -140,42 +126,18 @@ class BSPatternEngine extends Engine {
 				who:"guest",//guest, bot
 				message:message
 			}],
+			last_message: message,
+			last_time_message: last_time,
 		};
 		
 
-		const newUser = new Communications(content);
-		await newUser.save();
-
-		const lastMessageData = {
-			uid:uid,
-			data_bot: {
-					time:last_time,
-					message:message
-				},
-			data_guest: {
-					time: null,
-					message:"",
-				},
-
-		}
+		const newCom = new Communications(content);
+		await newCom.save();
 		
-		let data = await LastMessage.findOne({datatype: 'last-message', bot_id: bot_id, "data.uid" : uid},{'data.$': 1});
-		if((data != undefined) || (data != null)) {
-			await LastMessage.update({datatype: 'last-message', bot_id: bot_id, "data.uid" : uid},{"data.$.data-bot" : lastMessageData.data_bot, "data.$.data_guest" : lastMessageData.data_guest }
-			);
-		} else {	//If key not exits, insert
-			
-			data = await LastMessage.update(
-			  {datatype: 'last-message', bot_id: bot_id  },
-			  {$push: { "data" : lastMessageData}},
-			);
-		}
-
+		return newCom;
 	}
 	
 
-
-	
 	sendContentAnswer(bot_id, client, userId, query_string, answer) {
         try {
 			//if single message

@@ -7,11 +7,13 @@ var communicationSchama = mongoose.Schema({
     fullname:String,
     gender:String,
     data: [{
-        time:Number,
+        time:Date,
         who:String,//guest, bot
         message:String
     }],
-    tag:[String]
+	last_message: String,
+	last_time_message: Date,
+    tags:[String]
 });
 
 

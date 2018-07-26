@@ -29,7 +29,7 @@ class TagsListController extends Controller {
       let { tagName } = req.body;
       if(tagName) tagName = tagName.trim();
       console.log('tagname ' + tagName);
-      Communication.find({tag: tagName})
+      Communication.find({bot_id: req.session.bot_id, tag: tagName})
       .then( async (success) => {
         if(success){
           console.log('communication: ' + success);
@@ -45,9 +45,10 @@ class TagsListController extends Controller {
     }
 
     static async getTagsList(req, res){
-      TagConfig.findOne({name:'tag'})
+      TagConfig.findOne({"name": "fbsbot", "datatype" : "package-config",bot_id: req.session.bot_id})
       .then(success => {
-        if(success) res.send({success: true, data: success.data})
+        if(success) res.send({success: true, data: success.tags})
+        else res.send({success: true, data: []})
       })
       .catch(err => {
         console.log(err.message);
@@ -60,10 +61,10 @@ class TagsListController extends Controller {
       if(tagName) tagName = tagName.trim();
       console.log(tagName);
       //delete tag name in data array
-      const tagUpdated = await TagConfig.findOneAndUpdate({name: 'tag'}, {$pull: {data: tagName}}, {new: true});
+      const tagUpdated = await TagConfig.findOneAndUpdate({"name": "fbsbot", "datatype" : "package-config",bot_id: req.session.bot_id}, {$pull: {data: tagName}}, {new: true});
 
       if(tagUpdated){
-        Communication.updateMany({ }, {$pull:  { tag: tagName }}, { multi: true })
+        Communication.updateMany({ bot_id: req.session.bot_id}, {$pull:  { tag: tagName }}, { multi: true })
         .then(success => {
           if(success) {
             return res.send({success: true}); 
@@ -110,13 +111,13 @@ class TagsListController extends Controller {
       let { tagName, idUsers } = req.body;
 
       if(tagName && idUsers){
-          let tag = await TagConfig.findOneAndUpdate({name: 'tag'}, {$push: {data: tagName}})
-          if(tag){
+          let tag = await TagConfig.findOneAndUpdate({"name": "fbsbot", "datatype" : "package-config", bot_id:  req.session.bot_id, 'tags': { $ne: tagName }}, {$push: {tags: tagName}})
+          //if(tag){
             idUsers.forEach(async (idUser) => {
-              let userAddedtag = await Communication.findByIdAndUpdate(idUser, {$push : {tag: tagName}});
+              let userAddedtag = await Communication.findOneAndUpdate({_id: idUser , bot_id:  req.session.bot_id, 'tags': { $ne: tagName }}, {$push : {tags: tagName}});
             })
             res.send({success: true});
-          }
+          //}
       }else{
         res.send({success: false, msg: 'NO_TAGNAME_OR_NO_IDUSER'})
       }

@@ -14,7 +14,7 @@ var userSchema = mongoose.Schema({
 	phone: Number,
 	note: String,
 	avatar: String,
-	status: String,
+	status: { type: String, default: "active" },
 	updated_date: Date,
 	created_date: Date,
 	active_hash: String,

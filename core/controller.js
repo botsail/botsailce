@@ -9,7 +9,7 @@ class Controller extends BotSailBase {
 	
 	static loggedIn(req, res, next) {
 		if (req.session.user) { // req.session.passport._id
-
+			res.locals.user = req.session.user;
 			next();
 
 		} else {
@@ -29,7 +29,7 @@ class Controller extends BotSailBase {
 	//use for middleware
 	static verifyAuth(req, res, next) {
 		if (req.session.user) { // req.session.passport._id
-
+			res.locals.user = req.session.user;
 			if((req.url == '/') || (req.url.indexOf("/home") > 0) || (req.url.indexOf("/bot_list") > 0) || (req.url.indexOf("/active_bot") > 0))
 				next();
 			else {
