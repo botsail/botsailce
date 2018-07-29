@@ -32,10 +32,34 @@ app.use(bodyParser.urlencoded({extended: true}));
 var mongoose = require('mongoose');
 var configDB = null;
 //configuration ===============================================================
+
 if (fs.existsSync(appRoot + "/config/database.js")) {
-configDB = configDB = require('./config/database.js');
-mongoose.connect(configDB.url); // connect to our database  
-} 
+
+  configDB = require('./config/database.js');
+
+  console.log('appRoot', appRoot);
+  console.log(configDB);
+  mongoose.connect(
+    configDB.url,
+    {
+      dbName: configDB.dbName,
+      user: configDB.user,
+      pass: configDB.pass,
+      reconnectInterval: 500,
+      reconnectTries: 100
+    }
+  )
+
+
+  .then(
+    () => { console.log('connect to db: success') },
+    err => {
+      console.error('connect to db: fail');
+      console.error(err)
+    }
+  );
+
+}
 
 require('./app/models/process/passport')(passport); // pass passport for configuration
 
@@ -97,18 +121,20 @@ app.use(function(req, res, next) {
 
 
 Package.findOne({"type": "chatbot-engine", "status": "active"},function(err,result){
+  if (err) return console.error(err);
+
 	global.appChatbotEngineConfig = {};
 	global.appClient = {};
 
-    global.serverUrl = constant.host;
-    global.appChatbotEnginePath = result.package_folder;
-    global.appChatbotEngineAction = result.action;
-    const ChatbotEngine = require(global.appRoot + '/packages/' + global.appChatbotEnginePath + '/' + global.appChatbotEngineAction);
-    global.appFBChatbotEngine = new ChatbotEngine(); 
-    
+  global.serverUrl = constant.host;
+  global.appChatbotEnginePath = result.package_folder;
+  global.appChatbotEngineAction = result.action;
+  const ChatbotEngine = require(global.appRoot + '/packages/' + global.appChatbotEnginePath + '/' + global.appChatbotEngineAction);
+  global.appFBChatbotEngine = new ChatbotEngine();
 
-    var app = require('express')();
-    var server = require('http').Server(app);
-}); 
+
+  var app = require('express')();
+  var server = require('http').Server(app);
+});
 
 exports = module.exports = app;

@@ -1,0 +1,50 @@
+version: '3.1'
+
+services:
+
+  mongo:
+    image: mongo
+    restart: always
+    volumes:
+      - ./docker/database:/data/db
+
+  mongoinit:
+    image: mongo
+    volumes:
+      - ./docker/database:/data/db
+      - ./temps:/var/temps
+      - ./docker/db-init.sh:/var/db-init.sh
+    command: bash /var/db-init.sh
+
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    depends_on:
+      - mongo
+
+
+  app:
+    image: mongo-express
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - ./app:/var/botsailce/app:Z
+      - ./app.js:/var/botsailce/app.js:Z
+      - ./core:/var/botsailce/core:Z
+      - ./lib:/var/botsailce/lib:Z
+      - ./packages:/var/botsailce/packages:Z
+      - ./public:/var/botsailce/public:Z
+      - ./routers:/var/botsailce/routers:Z
+      - ./package.json:/var/botsailce/package.json:Z
+      # - ./config:/var/botsailce/config:Z
+
+      # patch for docker
+      - ./docker/config:/var/botsailce/config:Z
+      - ./docker/app-entrypoint.sh:/var/app-entrypoint.sh:Z
+    entrypoint: /var/app-entrypoint.sh
+    depends_on:
+      - mongo
